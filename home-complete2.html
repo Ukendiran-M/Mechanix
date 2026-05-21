@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOS Auto Bologna - Assistenza Auto H24 | Apertura Porte, Batteria, Chiavi</title>
+  <meta name="description" content="Assistenza auto d'emergenza a Bologna 24/7. Apertura porte senza scasso, avvio batteria, duplicazione chiavi. Intervento in 20 minuti su Bologna, Modena, Ferrara, Ravenna.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --bg-card: #0a0a0a;
+      --bg-card-hover: #111111;
+      --accent-orange: #ff6b00;
+      --accent-red: #e63900;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --border-color: #1a1a1a;
+      --border-hover: #333333;
+      --transition-bezier: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
+    a { -webkit-tap-highlight-color: transparent; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* PAGE LOAD ANIMATION */
+    .page-loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: transform 0.8s var(--transition-bezier); }
+    .page-loader.loaded { transform: translateY(-100%); }
+    .loader-text { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; color: var(--text-main); overflow: hidden; }
+    .loader-text span { display: inline-block; transform: translateY(100%); animation: revealText 0.8s var(--transition-bezier) forwards; }
+    @keyframes revealText { to { transform: translateY(0); } }
+
+    /* ══════════════════════════════════
+       NAV - SIMPLIFIED UI
+    ══════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 5%; height: 80px;
+      background: rgba(0, 0, 0, 0); 
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s var(--transition-bezier), height 0.4s var(--transition-bezier);
+    }
+    nav.scrolled { background: rgba(0,0,0,0.95); height: 70px; border-bottom: 1px solid var(--border-color); }
+    .nav-logo { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; color: var(--text-main); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 600; position: relative; overflow: hidden; display: inline-block; transition: color 0.3s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--text-main); transform: translateX(-100%); transition: transform 0.4s var(--transition-bezier); }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: translateX(0); }
+    
+    /* ENHANCED BUTTON UX */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; font-weight: 700; border-radius: 8px; transition: all 0.4s var(--transition-bezier); cursor: pointer; position: relative; overflow: hidden; z-index: 1; }
+    .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; transition: transform 0.4s var(--transition-bezier); transform-origin: left; }
+    
+    .btn-solid { background: var(--text-main); color: #000; padding: 14px 28px; font-size: 15px; }
+    .btn-solid::before { background: var(--accent-orange); transform: scaleX(0); }
+    .btn-solid:hover { color: #fff; transform: translateY(-4px); box-shadow: 0 12px 24px rgba(255,107,0,0.2); }
+    .btn-solid:hover::before { transform: scaleX(1); }
+
+    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 14px 28px; font-size: 15px; }
+    .btn-outline:hover { border-color: var(--text-main); transform: translateY(-2px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+    .hamburger span { width: 28px; height: 2px; background: var(--text-main); transition: all 0.3s; }
+
+    /* ══════════════════════════════════
+       HERO - MINIMAL UI, MAX UX
+    ══════════════════════════════════ */
+    .hero {
+      min-height: 100vh; padding: 140px 5% 80px;
+      display: flex; align-items: center; background: var(--bg-dark);
+      position: relative;
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: center; }
+    .hero-left { display: flex; flex-direction: column; gap: 32px; }
+    .live-badge { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; width: fit-content; }
+    .live-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 10px #00ff00; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .live-badge span { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+    
+    /* Dynamic Typography */
+    .hero-h1 { font-family: 'Outfit', sans-serif; font-size: 72px; font-weight: 800; line-height: 1; letter-spacing: -2px; overflow: hidden; }
+    .hero-h1 span { display: block; transform: translateY(100%); animation: slideUp 0.8s var(--transition-bezier) forwards; }
+    .hero-h1 span:nth-child(2) { color: var(--text-muted); animation-delay: 0.1s; }
+    @keyframes slideUp { to { transform: translateY(0); } }
+    
+    .hero-sub { font-size: 18px; line-height: 1.6; color: var(--text-muted); max-width: 500px; opacity: 0; animation: fadeIn 1s 0.3s forwards; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 16px; opacity: 0; animation: fadeIn 1s 0.4s forwards; }
+    
+    .hero-right { position: relative; opacity: 0; animation: scaleIn 1s 0.5s var(--transition-bezier) forwards; }
+    @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes fadeIn { to { opacity: 1; } }
+    
+    .hero-img-frame { border-radius: 12px; overflow: hidden; position: relative; }
+    /* Dynamic Image Hover */
+    .hero-img-frame img { width: 100%; height: 500px; object-fit: cover; filter: grayscale(100%); transition: all 0.8s var(--transition-bezier); transform: scale(1.05); }
+    .hero-img-frame:hover img { filter: grayscale(0%); transform: scale(1); }
+    
+    .float-card { position: absolute; background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: transform 0.4s var(--transition-bezier); }
+    .float-card:hover { transform: translateY(-10px) scale(1.05); border-color: var(--text-main); z-index: 10;}
+    .float-card-1 { bottom: -30px; left: -30px; }
+    .float-card-2 { top: 40px; right: -40px; }
+    .fc-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: var(--text-main); }
+    .fc-sub { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ══════════════════════════════════
+       STATS BAR - STRIPPED UI
+    ══════════════════════════════════ */
+    .stats-bar { border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 40px 5%; background: var(--bg-dark); }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+    .stat-item { display: flex; flex-direction: column; gap: 8px; }
+    .stat-num { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; line-height: 1; color: var(--text-main); }
+    .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ══════════════════════════════════
+       GLOBAL SECTION STYLES
+    ══════════════════════════════════ */
+    .section { padding: 120px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 64px; }
+    .section-tag { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+
+    /* ══════════════════════════════════
+       SERVICES GRID - HIGH UX
+    ══════════════════════════════════ */
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .srv-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.5s var(--transition-bezier); cursor: pointer; }
+    /* UX: Elevate and reveal on hover */
+    .srv-card:hover { transform: translateY(-16px); background: var(--bg-card-hover); border-color: var(--border-hover); box-shadow: 0 30px 60px rgba(0,0,0,0.9); }
+    
+    .srv-img-wrap { overflow: hidden; height: 240px; position: relative; }
+    .srv-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: all 0.6s var(--transition-bezier); }
+    .srv-card:hover .srv-img { filter: grayscale(0%); transform: scale(1.1); }
+    
+    .srv-body { padding: 32px; }
+    .srv-name { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+    .srv-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+    
+    /* UX: Arrow animation */
+    .srv-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; }
+    .srv-link .arrow { transition: transform 0.3s var(--transition-bezier); }
+    .srv-card:hover .srv-link .arrow { transform: translateX(8px); }
+
+    /* ══════════════════════════════════
+       HOW IT WORKS - MINIMAL LIST
+    ══════════════════════════════════ */
+    .how-section { background: var(--bg-card); }
+    .steps-list { display: flex; flex-direction: column; }
+    .step-row { display: grid; grid-template-columns: 80px 1fr; gap: 40px; padding: 40px 0; border-bottom: 1px solid var(--border-color); transition: all 0.4s var(--transition-bezier); }
+    .step-row:first-child { border-top: 1px solid var(--border-color); }
+    /* UX: Expand padding and highlight on hover */
+    .step-row:hover { padding-left: 20px; background: rgba(255,255,255,0.02); border-bottom-color: var(--text-main); cursor: default; }
+    .step-num { font-family: 'Outfit', sans-serif; font-size: 40px; font-weight: 800; color: var(--text-muted); transition: color 0.3s; }
+    .step-row:hover .step-num { color: var(--text-main); }
+    .step-content h3 { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .step-content p { font-size: 15px; color: var(--text-muted); line-height: 1.6; max-width: 600px; }
+
+    /* ══════════════════════════════════
+       WHY US - TYPOGRAPHY FOCUS
+    ══════════════════════════════════ */
+    .why-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .why-img { border-radius: 8px; filter: grayscale(100%); transition: filter 0.5s; width: 100%; height: 600px; object-fit: cover; }
+    .why-inner:hover .why-img { filter: grayscale(0%); }
+    .benefit-item { margin-bottom: 32px; position: relative; padding-left: 24px; }
+    .benefit-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; transition: transform 0.3s; }
+    .benefit-item:hover::before { transform: scale(2); background: var(--accent-orange); }
+    .benefit-item h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .benefit-item p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ══════════════════════════════════
+       REVIEWS - CLEAN CARDS
+    ══════════════════════════════════ */
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .review-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.4s var(--transition-bezier); }
+    .review-card:hover { transform: translateY(-8px); border-color: var(--border-hover); }
+    .review-text { font-size: 16px; line-height: 1.6; color: var(--text-muted); margin-bottom: 32px; }
+    .review-author { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ══════════════════════════════════
+       COVERAGE CTA
+    ══════════════════════════════════ */
+    .cta-section { background: var(--text-main); color: #000; text-align: center; padding: 120px 5%; }
+    .cta-inner { max-width: 800px; margin: 0 auto; }
+    .cta-h2 { font-family: 'Outfit', sans-serif; font-size: 56px; font-weight: 900; line-height: 1; margin-bottom: 24px; letter-spacing: -2px; }
+    .cta-p { font-size: 18px; color: #333; margin-bottom: 40px; line-height: 1.5; }
+    
+    .btn-dark { background: #000; color: #fff; padding: 20px 40px; font-size: 18px; font-weight: 800; border-radius: 8px; }
+    .btn-dark:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.3); background: var(--accent-orange); }
+
+    /* ══════════════════════════════════
+       FOOTER - MINIMAL
+    ══════════════════════════════════ */
+    footer { padding: 80px 5% 40px; border-top: 1px solid var(--border-color); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 64px; }
+    .f-logo { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; margin-bottom: 16px; display: block; color: var(--text-main); }
+    .f-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 300px; }
+    .f-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; color: var(--text-muted); }
+    .f-links { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .f-links a { color: var(--text-main); font-size: 14px; font-weight: 500; transition: color 0.3s, transform 0.3s; display: inline-block; }
+    .f-links a:hover { color: var(--accent-orange); transform: translateX(4px); }
+    .f-bottom { border-top: 1px solid var(--border-color); padding-top: 32px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+
+    /* ══════════════════════════════════
+       UX ANIMATION CLASSES (INTERSECTION OBSERVER)
+    ══════════════════════════════════ */
+    .anim-reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--transition-bezier); }
+    .anim-reveal.is-visible { opacity: 1; transform: translateY(0); }
+    
+    .anim-scale { opacity: 0; transform: scale(0.95); transition: all 0.8s var(--transition-bezier); }
+    .anim-scale.is-visible { opacity: 1; transform: scale(1); }
+
+    .anim-stagger > * { opacity: 0; transform: translateY(30px); transition: all 0.6s var(--transition-bezier); }
+    .anim-stagger.is-visible > * { opacity: 1; transform: translateY(0); }
+    .anim-stagger.is-visible > *:nth-child(1) { transition-delay: 0.1s; }
+    .anim-stagger.is-visible > *:nth-child(2) { transition-delay: 0.2s; }
+    .anim-stagger.is-visible > *:nth-child(3) { transition-delay: 0.3s; }
+    .anim-stagger.is-visible > *:nth-child(4) { transition-delay: 0.4s; }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px) {
+      .hero-inner, .why-inner { grid-template-columns: 1fr; }
+      .hero-right { max-width: 600px; margin: 0 auto; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-h1 { font-size: 56px; }
+    }
+    @media(max-width:768px) {
+      .services-grid, .reviews-grid, .footer-grid { grid-template-columns: 1fr; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .hero-h1 { font-size: 44px; }
+      .section-title { font-size: 36px; }
+      .cta-h2 { font-size: 40px; }
+      .step-row { grid-template-columns: 1fr; gap: 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="loader">
+  <div class="loader-text"><span>SOS Auto Bologna</span></div>
+</div>
+
+<nav id="navbar">
+  <a class="nav-logo" href="home-complete2.html">SOS Auto Bologna</a>
+  <ul class="nav-links">
+    <li><a href="home-complete2.html" class="active">Home</a></li>
+    <li><a href="services-complete2.html">Servizi</a></li>
+    <li><a href="coverage-contact-complete2.html">Copertura</a></li>
+  </ul>
+  <a class="btn btn-solid nav-cta" href="tel:+393780937934">Chiama Ora</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span>Attivo 24/7</span>
+      </div>
+      <h1 class="hero-h1">
+        <span>Bloccato fuori?</span>
+        <span>Arriviamo in 20 min.</span>
+      </h1>
+      <p class="hero-sub">Assistenza auto d'emergenza professionale su Bologna e provincia. Apertura porte senza scasso, avvio batteria, chiavi. Zero danni, attrezzature pro.</p>
+      <div class="hero-btns">
+        <a class="btn btn-solid" href="tel:+393780937934">Chiama +39 378 093 7934</a>
+        <a class="btn btn-outline" href="services-complete2.html">Vedi Servizi</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-frame">
+        <img src="assets/hero_lockout.png" alt="Apertura Porta">
+      </div>
+      <div class="float-card float-card-1">
+        <div class="fc-title">20 min</div>
+        <div class="fc-sub">Tempo Medio Arrivo</div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="fc-title">5.0★</div>
+        <div class="fc-sub">Valutazione Google</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner anim-stagger">
+    <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">Interventi</span></div>
+    <div class="stat-item"><span class="stat-num">20'</span><span class="stat-label">Arrivo Medio</span></div>
+    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Province</span></div>
+    <div class="stat-item"><span class="stat-num">H24</span><span class="stat-label">Disponibilità</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head anim-reveal">
+      <span class="section-tag">I Servizi</span>
+      <h2 class="section-title">Emergenza risolta.</h2>
+    </div>
+    <div class="services-grid anim-stagger">
+      <div class="srv-card" onclick="location.href='services-complete2.html'">
+        <div class="srv-img-wrap"><img class="srv-img" src="assets/hero_lockout.png" alt="Apertura"></div>
+        <div class="srv-body">
+          <h3 class="srv-name">Apertura Porte</h3>
+          <p class="srv-desc">Sblocco portiere senza scasso. Cuscini d'aria calibrati e grimaldelli decoder per zero danni alla lamiera.</p>
+          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+        </div>
+      </div>
+      <div class="srv-card" onclick="location.href='services-complete2.html'">
+        <div class="srv-img-wrap"><img class="srv-img" src="assets/battery_service.png" alt="Batteria"></div>
+        <div class="srv-body">
+          <h3 class="srv-name">Avvio Batteria</h3>
+          <p class="srv-desc">Booster professionali ad alto spunto per avviare il veicolo senza danneggiare le centraline elettroniche.</p>
+          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+        </div>
+      </div>
+      <div class="srv-card" onclick="location.href='services-complete2.html'">
+        <div class="srv-img-wrap"><img class="srv-img" src="assets/key_duplication.png" alt="Chiavi"></div>
+        <div class="srv-body">
+          <h3 class="srv-name">Duplicazione Chiavi</h3>
+          <p class="srv-desc">Ricostruzione chiavi da zero, programmazione transponder e telecomando direttamente sul posto.</p>
+          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section how-section">
+  <div class="section-inner">
+    <div class="section-head anim-reveal">
+      <span class="section-tag">Il Processo</span>
+      <h2 class="section-title">Come funziona</h2>
+    </div>
+    <div class="steps-list anim-stagger">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Chiama o scrivi</h3>
+          <p>Un operatore risponde sempre, H24. Indica il problema e la posizione per avere subito un preventivo trasparente.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Arrivo in 20 minuti</h3>
+          <p>Il tecnico più vicino parte immediatamente. Copriamo Bologna città in media in soli 20 minuti dalla chiamata.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Risoluzione e pagamento</h3>
+          <p>Risolviamo il problema senza danni. Verifichi il lavoro e paghi comodamente con POS, contanti o carte.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner why-inner">
+    <div class="anim-reveal">
+      <div class="section-head" style="margin-bottom: 40px;">
+        <span class="section-tag">Perché Noi</span>
+        <h2 class="section-title">La scelta giusta.</h2>
+      </div>
+      <div class="benefit-item">
+        <h4>Nessun Danno Garantito</h4>
+        <p>Zero graffi, tecniche professionali e strumentazione aggiornata per lavorare in totale sicurezza sul tuo veicolo.</p>
+      </div>
+      <div class="benefit-item">
+        <h4>Prezzi Trasparenti</h4>
+        <p>Preventivo esatto comunicato al telefono prima dell'intervento. Nessuna sorpresa o costo nascosto finale.</p>
+      </div>
+      <div class="benefit-item">
+        <h4>Copertura Regionale</h4>
+        <p>Non solo Bologna: copriamo stabilmente anche le province di Modena, Ferrara e Ravenna con tecnici dedicati.</p>
+      </div>
+    </div>
+    <div class="anim-scale">
+      <img class="why-img" src="assets/team_technician.png" alt="Tecnico">
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-card);">
+  <div class="section-inner">
+    <div class="section-head anim-reveal">
+      <span class="section-tag">Recensioni</span>
+      <h2 class="section-title">Parola ai clienti.</h2>
+    </div>
+    <div class="reviews-grid anim-stagger">
+      <div class="review-card">
+        <p class="review-text">"Rimasto chiuso fuori dall'auto alle 2 di notte. In 25 minuti il tecnico era da me. Prezzo onesto e lavoro pulitissimo."</p>
+        <div class="review-author">Marco T. — Bologna</div>
+      </div>
+      <div class="review-card">
+        <p class="review-text">"Batteria morta nel parcheggio del centro commerciale. Booster professionale e in un attimo l'auto è ripartita. Salvavita."</p>
+        <div class="review-author">Sara L. — Modena</div>
+      </div>
+      <div class="review-card">
+        <p class="review-text">"Hanno rifatto la mia chiave smart key persa sul posto. Rapidi, professionali e decisamente più comodi della concessionaria."</p>
+        <div class="review-author">Andrea P. — Ravenna</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section anim-reveal">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Emergenza in corso?</h2>
+    <p class="cta-p">Non perdere tempo. Il nostro tecnico è pronto a partire.</p>
+    <a href="tel:+393780937934" class="btn btn-dark">Chiama Ora: +39 378 093 7934</a>
+  </div>
+</section>
+
+<footer>
+  <div class="section-inner footer-grid">
+    <div>
+      <a href="home-complete2.html" class="f-logo">SOS Auto Bologna</a>
+      <p class="f-desc">Assistenza auto d'emergenza professionale. Attivi 24/7 su Bologna, Modena, Ferrara, Ravenna.</p>
+    </div>
+    <div>
+      <div class="f-title">Servizi</div>
+      <ul class="f-links">
+        <li><a href="services-complete2.html">Apertura Porte</a></li>
+        <li><a href="services-complete2.html">Avvio Batteria</a></li>
+        <li><a href="services-complete2.html">Duplicazione Chiavi</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-title">Azienda</div>
+      <ul class="f-links">
+        <li><a href="coverage-contact-complete2.html">Copertura & Contatti</a></li>
+        <li><a href="tel:+393780937934">Chiama Ora</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="section-inner f-bottom">
+    <div>© 2026 Assistenza Auto SOS Bologna</div>
+    <div>P.IVA IT12345678901</div>
+  </div>
+</footer>
+
+<script>
+  // Page load animation
+  window.addEventListener('load', () => {
+    setTimeout(() => { document.getElementById('loader').classList.add('loaded'); }, 1000);
+  });
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Intersection Observer for animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // Play once
+      }
+    });
+  }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+  document.querySelectorAll('.anim-reveal, .anim-scale, .anim-stagger').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
