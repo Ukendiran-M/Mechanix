@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOS Auto Bologna - Copertura & Contatti</title>
+  <meta name="description" content="Copertura territoriale SOS Auto Bologna: Bologna, Modena, Ferrara, Ravenna. Contattaci H24 per emergenza auto.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #080b11;
+      --accent-orange: #ff9f1c;
+      --accent-red: #ff5e36;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(17, 24, 39, 0.6);
+      --glow-orange: rgba(255, 159, 28, 0.15);
+      --glow-red: rgba(255, 94, 54, 0.3);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
+    a { -webkit-tap-highlight-color: transparent; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 4%; background: rgba(8, 11, 17, 0.8); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color); height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;
+    }
+    .nav-logo span { -webkit-text-fill-color: var(--text-main); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500;
+      transition: color 0.2s ease; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: -2px;
+      width: 0; height: 2px; background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a.active { color: var(--text-main); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      color: #000; padding: 10px 20px; border-radius: 8px;
+      font-size: 13px; font-weight: 700; text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--glow-orange); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--text-main); border-radius: 2px; }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: rgba(8, 11, 17, 0.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color); padding: 24px 4%; z-index: 99;
+      flex-direction: column; gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text-muted); text-decoration: none; font-size: 16px; font-weight: 500; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--accent-orange); }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 120px 4% 60px;
+      background: radial-gradient(circle at 80% 50%, rgba(255, 94, 54, 0.06) 0%, transparent 50%);
+    }
+    .page-hero .container { max-width: 1200px; margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent-orange); }
+    .breadcrumb span { color: rgba(255,255,255,0.2); }
+    .page-label { font-size: 13px; font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .page-title {
+      font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; line-height: 1.2;
+      background: linear-gradient(135deg, #fff 50%, var(--text-muted) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px;
+    }
+    .page-desc { font-size: 16px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+    /* ── COVERAGE SECTION ── */
+    .coverage-section { padding: 40px 4% 80px; }
+    .coverage-section .container {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+
+    /* Radar map — FULL (it's the key visual of this page, kept at 25% ratio) */
+    .map-side { position: relative; display: flex; justify-content: center; align-items: center; }
+    .radar-container {
+      width: 100%; max-width: 420px; aspect-ratio: 1;
+      background: rgba(10, 15, 26, 0.7); border: 1px solid var(--border-color);
+      border-radius: 50%; position: relative; overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(255, 159, 28, 0.05);
+      backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center;
+    }
+    .radar-circle { position: absolute; border: 1px dashed rgba(255, 159, 28, 0.15); border-radius: 50%; animation: pulse-ring 4s linear infinite; }
+    .radar-circle-1 { width: 30%; height: 30%; }
+    .radar-circle-2 { width: 60%; height: 60%; }
+    .radar-circle-3 { width: 90%; height: 90%; }
+    .radar-sweep {
+      position: absolute; width: 50%; height: 50%;
+      background: linear-gradient(45deg, rgba(255, 159, 28, 0.15) 0%, transparent 100%);
+      transform-origin: bottom right; bottom: 50%; right: 50%;
+      border-radius: 100% 0 0 0; animation: sweep 6s linear infinite;
+    }
+    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes pulse-ring { 0% { opacity: 0.3; } 50% { opacity: 0.7; } 100% { opacity: 0.3; } }
+    .hotspot {
+      position: absolute; width: 12px; height: 12px; background: var(--accent-orange);
+      border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--accent-orange); z-index: 5; transition: all 0.3s ease;
+    }
+    .hotspot::after {
+      content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+      border: 1px solid var(--accent-orange); border-radius: 50%; animation: ping 1.5s ease-out infinite;
+    }
+    .hotspot:hover { background: #fff; transform: scale(1.3); box-shadow: 0 0 20px #fff; }
+    .hotspot-label {
+      position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+      background: rgba(8, 11, 17, 0.85); border: 1px solid var(--border-color);
+      padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; color: #fff;
+      white-space: nowrap; pointer-events: none; opacity: 0.8; transition: opacity 0.2s ease;
+    }
+    .hotspot:hover .hotspot-label { opacity: 1; background: var(--accent-orange); color: #000; border-color: var(--accent-orange); }
+    @keyframes ping { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+    .hs-bologna { top: 50%; left: 50%; width: 16px; height: 16px; margin-top: -8px; margin-left: -8px; background: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
+    .hs-bologna::after { border-color: var(--accent-red); }
+    .hs-modena { top: 38%; left: 24%; }
+    .hs-ferrara { top: 22%; left: 62%; }
+    .hs-imola { top: 62%; left: 68%; }
+
+    /* Info side */
+    .info-side { display: flex; flex-direction: column; gap: 28px; }
+    .info-header { display: flex; flex-direction: column; gap: 12px; }
+    .info-header span { font-size: 13px; font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1.5px; }
+    .info-header h2 {
+      font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800;
+      background: linear-gradient(135deg, #fff 50%, var(--text-muted) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .info-header p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .cities-box { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; backdrop-filter: blur(12px); }
+    .cities-box h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+    .cities-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .city-item { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; transition: color 0.2s ease; cursor: default; }
+    .city-item:hover { color: var(--accent-orange); }
+    .city-dot { width: 4px; height: 4px; background: rgba(255, 159, 28, 0.4); border-radius: 50%; }
+    .city-item:hover .city-dot { background: var(--accent-orange); box-shadow: 0 0 5px var(--accent-orange); }
+
+    /* Skeleton for extended cities coming soon */
+    .cities-skeleton-note { font-size: 12px; color: rgba(255,255,255,0.15); margin-top: 12px; text-align: center; font-style: italic; }
+
+    /* ── CONTACT SECTION ── */
+    .contact-section {
+      padding: 0 4% 80px;
+      background: radial-gradient(circle at 50% 100%, rgba(255, 94, 54, 0.06) 0%, transparent 60%);
+    }
+    .contact-section .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+    .contact-header { text-align: center; display: flex; flex-direction: column; gap: 12px; }
+    .contact-header span { font-size: 13px; font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1.5px; }
+    .contact-header h2 {
+      font-family: 'Outfit', sans-serif; font-size: 38px; font-weight: 800;
+      background: linear-gradient(135deg, #fff 50%, var(--text-muted) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .contact-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: stretch; }
+    .call-card {
+      background: linear-gradient(135deg, rgba(255, 94, 54, 0.1) 0%, rgba(10, 15, 26, 0.9) 100%);
+      border: 1px solid rgba(255, 94, 54, 0.2); border-radius: 24px; padding: 40px;
+      backdrop-filter: blur(16px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+      display: flex; flex-direction: column; gap: 24px; justify-content: center; position: relative; overflow: hidden;
+    }
+    .call-card::before {
+      content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(255, 94, 54, 0.15) 0%, transparent 60%); pointer-events: none;
+    }
+    .call-badge {
+      display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 30px;
+      width: fit-content; font-size: 12px; font-weight: 700; color: #fff;
+    }
+    .blinking-indicator { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: blink-green 1.2s infinite; }
+    @keyframes blink-green { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; transform: scale(1.1); } }
+    .call-card h3 { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #fff; line-height: 1.2; }
+    .call-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .btn-dial {
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      color: #000; padding: 20px 32px; border-radius: 12px; font-size: 22px; font-weight: 800;
+      text-decoration: none; box-shadow: 0 8px 30px var(--glow-red);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-dial:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 40px var(--glow-red); }
+    .btn-dial svg { width: 28px; height: 28px; fill: #000; animation: shake 1.5s infinite; }
+    @keyframes shake { 0%, 100% { transform: rotate(0); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); } 20%, 40%, 60%, 80% { transform: rotate(10deg); } }
+    .details-card {
+      background: var(--glass-bg); border: 1px solid var(--border-color);
+      border-radius: 24px; padding: 32px; backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 24px; justify-content: space-between;
+    }
+    .info-group { display: flex; flex-direction: column; gap: 6px; }
+    .info-label { font-size: 11px; font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; }
+    .info-value { font-size: 15px; color: #fff; font-weight: 600; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #10b981; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px;
+      text-decoration: none; transition: all 0.2s ease;
+    }
+    .social-btn:hover { background: #10b981; color: #000; transform: translateY(-1px); }
+    .social-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px 4%; border-top: 1px solid var(--border-color);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo {
+      font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer-copy { font-size: 12px; color: var(--text-muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 968px) {
+      .coverage-section .container { grid-template-columns: 1fr; gap: 48px; }
+      .map-side { order: 2; }
+      .info-side { order: 1; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 36px; }
+    }
+    @media (max-width: 480px) {
+      .cities-grid { grid-template-columns: repeat(2, 1fr); }
+      .call-card { padding: 28px; }
+      .btn-dial { font-size: 18px; width: 100%; }
+      .page-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="home-complete.html">SOS<span> Auto Bologna</span></a>
+    <ul class="nav-links">
+      <li><a href="home-complete.html">Home</a></li>
+      <li><a href="services-complete.html">Servizi</a></li>
+      <li><a href="coverage-contact-complete.html" class="active">Copertura & Contatti</a></li>
+    </ul>
+    <a class="nav-cta" href="tel:+393780937934">📞 Chiama Ora</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="home-complete.html" onclick="toggleMenu()">Home</a>
+    <a href="services-complete.html" onclick="toggleMenu()">Servizi</a>
+    <a href="coverage-contact-complete.html" class="active" onclick="toggleMenu()">Copertura & Contatti</a>
+    <a href="tel:+393780937934" style="color:var(--accent-orange);font-weight:700;">📞 Chiama Ora</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="home-complete.html">Home</a>
+        <span>/</span>
+        <span style="color:var(--text-main);">Copertura & Contatti</span>
+      </div>
+      <div class="page-label">Area Servita</div>
+      <h1 class="page-title">Dove Interveniamo &<br>Come Contattarci</h1>
+      <p class="page-desc">Copriamo capillarmente Bologna e province limitrofe. Disponibili 24/7 per qualsiasi emergenza auto.</p>
+    </div>
+  </section>
+
+  <!-- COVERAGE MAP -->
+  <section class="coverage-section">
+    <div class="container">
+      <div class="map-side">
+        <div class="radar-container">
+          <div class="radar-sweep"></div>
+          <div class="radar-circle radar-circle-1"></div>
+          <div class="radar-circle radar-circle-2"></div>
+          <div class="radar-circle radar-circle-3"></div>
+          <div class="hotspot hs-bologna"><span class="hotspot-label">Bologna (HQ)</span></div>
+          <div class="hotspot hs-modena"><span class="hotspot-label">Modena</span></div>
+          <div class="hotspot hs-ferrara"><span class="hotspot-label">Ferrara</span></div>
+          <div class="hotspot hs-imola"><span class="hotspot-label">Imola</span></div>
+        </div>
+      </div>
+      <div class="info-side">
+        <div class="info-header">
+          <span>Copertura Territoriale</span>
+          <h2>Dove Interveniamo</h2>
+          <p>La nostra flotta mobile è dislocata strategicamente per garantire interventi rapidissimi su tutta la città metropolitana di Bologna e zone limitrofe.</p>
+        </div>
+        <div class="cities-box">
+          <h4>Comuni e Località Servite</h4>
+          <div class="cities-grid">
+            <div class="city-item"><span class="city-dot"></span>Bologna</div>
+            <div class="city-item"><span class="city-dot"></span>Modena</div>
+            <div class="city-item"><span class="city-dot"></span>Ferrara</div>
+            <div class="city-item"><span class="city-dot"></span>Ravenna</div>
+            <div class="city-item"><span class="city-dot"></span>Imola</div>
+            <div class="city-item"><span class="city-dot"></span>Lugo</div>
+            <div class="city-item"><span class="city-dot"></span>Faenza</div>
+            <div class="city-item"><span class="city-dot"></span>San Lazzaro</div>
+            <div class="city-item"><span class="city-dot"></span>Casalecchio</div>
+          </div>
+          <p class="cities-skeleton-note">+ altre 20 città in aggiornamento...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-header">
+        <span>Emergenza Attiva</span>
+        <h2>Contattaci Subito</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="call-card">
+          <div class="call-badge">
+            <span class="blinking-indicator"></span>
+            Operatori Disponibili Ora
+          </div>
+          <h3>Hai bisogno di assistenza immediata sul posto?</h3>
+          <p>Clicca sul pulsante qui sotto per avviare una chiamata diretta. Un operatore ti risponderà immediatamente per richiedere la posizione e inviare l'unità mobile.</p>
+          <a class="btn-dial" href="tel:+393780937934">
+            <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+            +39 378 093 7934
+          </a>
+        </div>
+        <div class="details-card">
+          <div class="info-group">
+            <span class="info-label">Orari Servizio</span>
+            <span class="info-value">Aperto 24 ore su 24 / 7 giorni</span>
+          </div>
+          <div class="info-group">
+            <span class="info-label">Sede Base</span>
+            <span class="info-value">Bologna, Italia (Servizio Mobile)</span>
+          </div>
+          <div class="info-group">
+            <span class="info-label">Email</span>
+            <span class="info-value">info@assistenzaautosos.it</span>
+          </div>
+          <a class="social-btn" href="https://wa.me/393780937934" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.14 8.14 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24-1.44 0-2.85-.38-4.09-1.11l-.29-.17-3.05.8 1.83-1.8-.19-.3A8.212 8.212 0 0 1 3.73 11.9c0-4.53 3.7-8.23 8.24-8.23m-3.8 3.9c-.21 0-.42.06-.59.2-.18.15-.38.38-.38.77 0 .8.5 1.58.57 1.68.07.1 1.39 2.13 3.38 2.99.47.2.84.32 1.13.41.48.15.91.13 1.25.08.38-.06 1.17-.48 1.33-.94.16-.47.16-.87.11-.96-.04-.08-.16-.13-.34-.23-.18-.1-.1-.47-.83-.8-.16-.07-.29-.1-.41.1-.12.18-.46.59-.57.7-.1.12-.21.13-.39.03-.18-.1-.76-.28-1.45-.9-.54-.48-.9-1.07-.98-1.22-.09-.15-.01-.23.08-.32.08-.08.18-.21.27-.32.09-.1.12-.18.18-.3.06-.12.03-.23-.01-.32-.04-.09-.38-.92-.53-1.27-.14-.35-.3-.3-.41-.3"/></svg>
+            Scrivici su WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">SOS Auto Bologna</div>
+    <div class="footer-copy">© 2026 Assistenza Auto SOS Bologna · Servizio H24</div>
+  </footer>
+
+  <script>
+    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').style.background = window.scrollY > 40 ? 'rgba(8,11,17,0.97)' : 'rgba(8,11,17,0.8)';
+    });
+  </script>
+</body>
+</html>
