@@ -21,22 +21,13 @@
     /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5%;height:70px;background:rgba(8,11,17,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;transition:background 0.3s;}
     nav.scrolled{background:rgba(8,11,17,0.98);}
-    .nav-logo{font-family:'Outfit',sans-serif;font-size:22px;font-weight:900;}
+    .nav-logo{font-family:'Outfit',sans-serif;font-size:22px;font-weight:900;pointer-events:none;cursor:default;}
     .nav-logo .sos{background:linear-gradient(135deg,var(--accent-orange),var(--accent-red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .nav-logo .rest{color:var(--text-main);}
     .nav-links{display:flex;gap:36px;list-style:none;}
-    .nav-links a{color:var(--text-muted);font-size:14px;font-weight:500;transition:color 0.2s;position:relative;padding-bottom:3px;}
-    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--accent-orange),var(--accent-red));transition:width 0.3s;}
-    .nav-links a:hover,.nav-links a.active{color:var(--text-main);}
-    .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-    .nav-cta{background:linear-gradient(135deg,var(--accent-orange),var(--accent-red));color:#000;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:800;transition:all 0.25s;}
-    .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--glow-orange);}
-    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
-    .hamburger span{width:24px;height:2px;background:var(--text-main);border-radius:2px;}
-    .mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:rgba(8,11,17,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-color);padding:28px 5%;z-index:99;flex-direction:column;gap:22px;}
-    .mobile-menu.open{display:flex;} .mobile-menu a{color:var(--text-muted);font-size:16px;font-weight:500;}
-    .mobile-menu a:hover,.mobile-menu a.active{color:var(--accent-orange);}
-    @media(max-width:768px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}}
+    /* ALL NAV ITEMS DISABLED - non-clickable on all devices */
+    .nav-links .nav-item{color:var(--text-muted);font-size:14px;font-weight:500;pointer-events:none;cursor:default;user-select:none;-webkit-user-select:none;}
+    .nav-cta-disabled{background:linear-gradient(135deg,var(--accent-orange),var(--accent-red));color:#000;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:800;pointer-events:none;cursor:default;user-select:none;-webkit-user-select:none;opacity:0.6;}
 
     /* PAGE HERO */
     .page-hero{padding:120px 5% 80px;background:radial-gradient(ellipse at 80% 40%,rgba(255,94,54,0.09),transparent 55%),radial-gradient(ellipse at 20% 70%,rgba(255,159,28,0.06),transparent 50%);}
@@ -192,21 +183,14 @@
 <body>
 
 <nav id="navbar">
-  <a class="nav-logo" href="home-complete1.html"><span class="sos">SOS</span><span class="rest"> Auto Bologna</span></a>
+  <span class="nav-logo"><span class="sos">SOS</span><span class="rest"> Auto Bologna</span></span>
   <ul class="nav-links">
-    <li><a href="home-complete1.html">Home</a></li>
-    <li><a href="services-complete1.html">Servizi</a></li>
-    <li><a href="coverage-contact-complete1.html" class="active">Copertura & Contatti</a></li>
+    <li><span class="nav-item">Home</span></li>
+    <li><span class="nav-item">Servizi</span></li>
+    <li><span class="nav-item" style="color:var(--text-main);">Copertura &amp; Contatti</span></li>
   </ul>
-  <a class="nav-cta" href="tel:+393780937934">📞 Chiama Ora</a>
-  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  <span class="nav-cta-disabled">📞 Chiama Ora</span>
 </nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="home-complete1.html">Home</a>
-  <a href="services-complete1.html">Servizi</a>
-  <a href="coverage-contact-complete1.html" class="active">Copertura & Contatti</a>
-  <a href="tel:+393780937934" style="color:var(--accent-orange);font-weight:800;">📞 +39 378 093 7934</a>
-</div>
 
 <!-- PAGE HERO -->
 <section class="page-hero">
