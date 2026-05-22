@@ -10,16 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #000000;
-      --bg-card: #0a0a0a;
-      --bg-card-hover: #111111;
-      --accent-orange: #ff6b00;
-      --accent-red: #e63900;
-      --text-main: #ffffff;
-      --text-muted: #888888;
-      --border-color: #1a1a1a;
-      --border-hover: #333333;
-      --transition-bezier: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg-dark: #080b11;
+      --bg-card: #0d1117;
+      --accent-orange: #ff9f1c;
+      --accent-red: #ff5e36;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(17, 24, 39, 0.6);
+      --glow-orange: rgba(255, 159, 28, 0.25);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
     html { scroll-behavior: smooth; }
@@ -27,452 +26,615 @@
     a { -webkit-tap-highlight-color: transparent; text-decoration: none; }
     img { max-width: 100%; display: block; }
 
-    /* PAGE LOAD ANIMATION */
-    .page-loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: transform 0.8s var(--transition-bezier); }
-    .page-loader.loaded { transform: translateY(-100%); }
-    .loader-text { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; color: var(--text-main); overflow: hidden; }
-    .loader-text span { display: inline-block; transform: translateY(100%); animation: revealText 0.8s var(--transition-bezier) forwards; }
-    @keyframes revealText { to { transform: translateY(0); } }
-
     /* ══════════════════════════════════
-       NAV - SIMPLIFIED UI
+       NAV
     ══════════════════════════════════ */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 0 5%; height: 80px;
-      background: rgba(0, 0, 0, 0); 
+      padding: 0 5%; height: 70px;
+      background: rgba(8, 11, 17, 0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
       display: flex; align-items: center; justify-content: space-between;
-      transition: background 0.4s var(--transition-bezier), height 0.4s var(--transition-bezier);
+      transition: background 0.3s ease;
     }
-    nav.scrolled { background: rgba(0,0,0,0.95); height: 70px; border-bottom: 1px solid var(--border-color); }
-    .nav-logo { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; color: var(--text-main); }
-    .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 600; position: relative; overflow: hidden; display: inline-block; transition: color 0.3s; }
-    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--text-main); transform: translateX(-100%); transition: transform 0.4s var(--transition-bezier); }
+    nav.scrolled { background: rgba(8,11,17,0.98); }
+    .nav-logo { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; }
+    .nav-logo .sos { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-logo .rest { color: var(--text-main); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 500; transition: color 0.2s; position: relative; padding-bottom: 3px; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:linear-gradient(90deg,var(--accent-orange),var(--accent-red)); transition:width 0.3s; }
     .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
-    .nav-links a:hover::after, .nav-links a.active::after { transform: translateX(0); }
-    
-    /* ENHANCED BUTTON UX */
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; font-weight: 700; border-radius: 8px; transition: all 0.4s var(--transition-bezier); cursor: pointer; position: relative; overflow: hidden; z-index: 1; }
-    .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; transition: transform 0.4s var(--transition-bezier); transform-origin: left; }
-    
-    .btn-solid { background: var(--text-main); color: #000; padding: 14px 28px; font-size: 15px; }
-    .btn-solid::before { background: var(--accent-orange); transform: scaleX(0); }
-    .btn-solid:hover { color: #fff; transform: translateY(-4px); box-shadow: 0 12px 24px rgba(255,107,0,0.2); }
-    .btn-solid:hover::before { transform: scaleX(1); }
-
-    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 14px 28px; font-size: 15px; }
-    .btn-outline:hover { border-color: var(--text-main); transform: translateY(-2px); }
-
-    .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
-    .hamburger span { width: 28px; height: 2px; background: var(--text-main); transition: all 0.3s; }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-cta { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); color: #000; padding: 11px 22px; border-radius: 10px; font-size: 14px; font-weight: 800; transition: all 0.25s; }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--glow-orange); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-main); border-radius: 2px; transition: all 0.3s; }
+    .mobile-menu { display: none; position: fixed; top: 70px; left:0; right:0; background: rgba(8,11,17,0.98); backdrop-filter:blur(20px); border-bottom:1px solid var(--border-color); padding: 28px 5%; z-index:99; flex-direction:column; gap:22px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text-muted); font-size: 16px; font-weight: 500; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--accent-orange); }
+    @media(max-width:768px){ .nav-links, .nav-cta { display:none; } .hamburger { display:flex; } }
 
     /* ══════════════════════════════════
-       HERO - MINIMAL UI, MAX UX
+       HERO
     ══════════════════════════════════ */
     .hero {
-      min-height: 100vh; padding: 140px 5% 80px;
-      display: flex; align-items: center; background: var(--bg-dark);
-      position: relative;
+      min-height: 100vh; padding: 110px 5% 80px;
+      display: flex; align-items: center;
+      background: radial-gradient(ellipse at 75% 30%, rgba(255,94,54,0.1) 0%, transparent 55%),
+                  radial-gradient(ellipse at 10% 80%, rgba(255,159,28,0.06) 0%, transparent 45%);
+      position: relative; overflow: hidden;
     }
-    .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: center; }
-    .hero-left { display: flex; flex-direction: column; gap: 32px; }
-    .live-badge { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; width: fit-content; }
-    .live-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 10px #00ff00; animation: blink 1s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .live-badge span { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
-    
-    /* Dynamic Typography */
-    .hero-h1 { font-family: 'Outfit', sans-serif; font-size: 72px; font-weight: 800; line-height: 1; letter-spacing: -2px; overflow: hidden; }
-    .hero-h1 span { display: block; transform: translateY(100%); animation: slideUp 0.8s var(--transition-bezier) forwards; }
-    .hero-h1 span:nth-child(2) { color: var(--text-muted); animation-delay: 0.1s; }
-    @keyframes slideUp { to { transform: translateY(0); } }
-    
-    .hero-sub { font-size: 18px; line-height: 1.6; color: var(--text-muted); max-width: 500px; opacity: 0; animation: fadeIn 1s 0.3s forwards; }
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 16px; opacity: 0; animation: fadeIn 1s 0.4s forwards; }
-    
-    .hero-right { position: relative; opacity: 0; animation: scaleIn 1s 0.5s var(--transition-bezier) forwards; }
-    @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes fadeIn { to { opacity: 1; } }
-    
-    .hero-img-frame { border-radius: 12px; overflow: hidden; position: relative; }
-    /* Dynamic Image Hover */
-    .hero-img-frame img { width: 100%; height: 500px; object-fit: cover; filter: grayscale(100%); transition: all 0.8s var(--transition-bezier); transform: scale(1.05); }
-    .hero-img-frame:hover img { filter: grayscale(0%); transform: scale(1); }
-    
-    .float-card { position: absolute; background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: transform 0.4s var(--transition-bezier); }
-    .float-card:hover { transform: translateY(-10px) scale(1.05); border-color: var(--text-main); z-index: 10;}
-    .float-card-1 { bottom: -30px; left: -30px; }
-    .float-card-2 { top: 40px; right: -40px; }
-    .fc-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: var(--text-main); }
-    .fc-sub { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .hero::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 2; }
+    .hero-left { display: flex; flex-direction: column; gap: 28px; }
+    .live-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,94,54,0.1); border: 1px solid rgba(255,94,54,0.25); padding: 8px 18px; border-radius: 50px; width: fit-content; }
+    .live-dot { width: 8px; height: 8px; background: #ff5e36; border-radius: 50%; box-shadow: 0 0 10px #ff5e36; animation: pulse-dot 1.5s infinite alternate; }
+    @keyframes pulse-dot { 0%{transform:scale(0.8);opacity:0.5;} 100%{transform:scale(1.3);opacity:1;box-shadow:0 0 18px #ff5e36;} }
+    .live-badge span { font-size: 12px; font-weight: 700; color: #ff5e36; text-transform: uppercase; letter-spacing: 1.2px; }
+    .hero-h1 { font-family: 'Outfit', sans-serif; font-size: 58px; font-weight: 900; line-height: 1.1; letter-spacing: -1px; }
+    .hero-h1 .white { background: linear-gradient(135deg, #fff 50%, rgba(255,255,255,0.5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-h1 .orange { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-sub { font-size: 17px; line-height: 1.65; color: var(--text-muted); max-width: 500px; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 16px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); color: #000; padding: 18px 36px; border-radius: 14px; font-size: 18px; font-weight: 800; box-shadow: 0 10px 30px var(--glow-orange); transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); border: 1px solid rgba(255,255,255,0.15); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 40px var(--glow-orange); }
+    .btn-primary svg { width: 22px; height: 22px; fill: #000; animation: shake 1.5s infinite; }
+    @keyframes shake { 0%,100%{transform:rotate(0);} 15%,45%,75%{transform:rotate(-13deg);} 30%,60%,90%{transform:rotate(13deg);} }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 10px; background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 18px 32px; border-radius: 14px; font-size: 16px; font-weight: 600; backdrop-filter: blur(12px); transition: all 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,159,28,0.3); transform: translateY(-1px); }
+    .hero-trust { display: flex; gap: 28px; flex-wrap: wrap; }
+    .trust-pill { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .trust-pill .ico { font-size: 16px; }
+    /* Hero Right */
+    .hero-right { position: relative; }
+    .hero-img-frame { border-radius: 28px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .hero-img-frame:hover { transform: scale(1.02) rotate(0.5deg); }
+    .hero-img-frame img { width: 100%; height: 420px; object-fit: cover; }
+    .hero-img-frame::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 50%,rgba(8,11,17,0.7)); pointer-events:none; }
+    .float-card { position: absolute; background: rgba(8,11,17,0.92); backdrop-filter: blur(14px); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .float-card-1 { bottom: 28px; left: -28px; border-left: 4px solid var(--accent-orange); display: flex; align-items: center; gap: 14px; }
+    .float-card-2 { top: 28px; right: -24px; text-align: center; }
+    .float-card-1 .fc-icon { font-size: 28px; }
+    .float-card-1 h4 { font-size: 14px; font-weight: 700; color: #fff; }
+    .float-card-1 p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .float-card-2 .fc-num { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 900; background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .float-card-2 p { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
     /* ══════════════════════════════════
-       STATS BAR - STRIPPED UI
+       STATS BAR
     ══════════════════════════════════ */
-    .stats-bar { border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 40px 5%; background: var(--bg-dark); }
-    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
-    .stat-item { display: flex; flex-direction: column; gap: 8px; }
-    .stat-num { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; line-height: 1; color: var(--text-main); }
-    .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .stats-bar { background: var(--bg-card); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 36px 5%; }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+    .stat-item { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+    .stat-num { font-family: 'Outfit', sans-serif; font-size: 40px; font-weight: 900; background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
 
     /* ══════════════════════════════════
-       GLOBAL SECTION STYLES
+       SERVICES SECTION
     ══════════════════════════════════ */
-    .section { padding: 120px 5%; }
+    .section { padding: 100px 5%; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
-    .section-head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 64px; }
-    .section-tag { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
-    .section-title { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+    .section-tag { font-size: 13px; font-weight: 700; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; display: block; }
+    .section-title { font-family: 'Outfit', sans-serif; font-size: 44px; font-weight: 800; background: linear-gradient(135deg, #fff 50%, rgba(255,255,255,0.4)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; line-height: 1.15; }
+    .section-sub { font-size: 16px; color: var(--text-muted); line-height: 1.65; max-width: 600px; margin-bottom: 56px; }
+
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .srv-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px; overflow: hidden; backdrop-filter: blur(12px); transition: all 0.4s cubic-bezier(0.165,0.84,0.44,1); position: relative; }
+    .srv-card:hover { transform: translateY(-10px); border-color: rgba(255,159,28,0.35); box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 40px rgba(255,159,28,0.12); }
+    .srv-img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.6s cubic-bezier(0.165,0.84,0.44,1); }
+    .srv-card:hover .srv-img { transform: scale(1.08); }
+    .srv-img-wrap { overflow: hidden; position: relative; }
+    .srv-img-wrap::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(13,17,23,0.9)); }
+    .srv-body { padding: 28px; background: linear-gradient(180deg, rgba(13,17,23,0.4), #0d1117); }
+    .srv-icon { font-size: 28px; margin-bottom: 14px; }
+    .srv-name { font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; color:#fff; margin-bottom:10px; }
+    .srv-desc { font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:20px; }
+    .srv-features { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+    .srv-features li { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-main); }
+    .srv-features li::before { content:'✓'; color:var(--accent-orange); font-weight:700; font-size:12px; }
+    .srv-cta { display:inline-flex; align-items:center; gap:6px; color:var(--accent-orange); font-weight:700; font-size:14px; transition:gap 0.2s; }
+    .srv-card:hover .srv-cta { gap: 10px; }
 
     /* ══════════════════════════════════
-       SERVICES GRID - HIGH UX
+       HOW IT WORKS
     ══════════════════════════════════ */
-    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .srv-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.5s var(--transition-bezier); cursor: pointer; }
-    /* UX: Elevate and reveal on hover */
-    .srv-card:hover { transform: translateY(-16px); background: var(--bg-card-hover); border-color: var(--border-hover); box-shadow: 0 30px 60px rgba(0,0,0,0.9); }
-    
-    .srv-img-wrap { overflow: hidden; height: 240px; position: relative; }
-    .srv-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: all 0.6s var(--transition-bezier); }
-    .srv-card:hover .srv-img { filter: grayscale(0%); transform: scale(1.1); }
-    
-    .srv-body { padding: 32px; }
-    .srv-name { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
-    .srv-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
-    
-    /* UX: Arrow animation */
-    .srv-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; }
-    .srv-link .arrow { transition: transform 0.3s var(--transition-bezier); }
-    .srv-card:hover .srv-link .arrow { transform: translateX(8px); }
+    .how-section { background: var(--bg-card); padding: 100px 5%; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; position: relative; }
+    .steps-grid::before { content:''; position:absolute; top:32px; left:10%; right:10%; height:1px; background:linear-gradient(90deg,transparent,rgba(255,159,28,0.3),transparent); }
+    .step-card { display:flex; flex-direction:column; gap:16px; align-items:center; text-align:center; }
+    .step-num { width:64px; height:64px; border-radius:50%; background:rgba(255,159,28,0.08); border:1px solid rgba(255,159,28,0.2); display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:24px; font-weight:900; background: linear-gradient(135deg,var(--accent-orange),var(--accent-red)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; position:relative; z-index:2; }
+    .step-num-wrap { width:64px; height:64px; border-radius:50%; background:var(--bg-dark); border:2px solid rgba(255,159,28,0.2); display:flex; align-items:center; justify-content:center; }
+    .step-icon { font-size: 28px; }
+    .step-h { font-family:'Outfit',sans-serif; font-size:18px; font-weight:700; color:#fff; }
+    .step-p { font-size:14px; color:var(--text-muted); line-height:1.6; }
 
     /* ══════════════════════════════════
-       HOW IT WORKS - MINIMAL LIST
+       WHY US
     ══════════════════════════════════ */
-    .how-section { background: var(--bg-card); }
-    .steps-list { display: flex; flex-direction: column; }
-    .step-row { display: grid; grid-template-columns: 80px 1fr; gap: 40px; padding: 40px 0; border-bottom: 1px solid var(--border-color); transition: all 0.4s var(--transition-bezier); }
-    .step-row:first-child { border-top: 1px solid var(--border-color); }
-    /* UX: Expand padding and highlight on hover */
-    .step-row:hover { padding-left: 20px; background: rgba(255,255,255,0.02); border-bottom-color: var(--text-main); cursor: default; }
-    .step-num { font-family: 'Outfit', sans-serif; font-size: 40px; font-weight: 800; color: var(--text-muted); transition: color 0.3s; }
-    .step-row:hover .step-num { color: var(--text-main); }
-    .step-content h3 { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-    .step-content p { font-size: 15px; color: var(--text-muted); line-height: 1.6; max-width: 600px; }
+    .why-section { padding: 100px 5%; }
+    .why-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .why-left { display:flex; flex-direction:column; gap:32px; }
+    .why-img-wrap { border-radius:28px; overflow:hidden; border:1px solid var(--border-color); box-shadow:0 30px 60px rgba(0,0,0,0.5); position:relative; }
+    .why-img-wrap img { width:100%; height:480px; object-fit:cover; }
+    .rating-overlay { position:absolute; bottom:24px; right:24px; background:rgba(8,11,17,0.9); backdrop-filter:blur(14px); border:1px solid var(--border-color); border-radius:16px; padding:18px 24px; }
+    .rating-big { font-family:'Outfit',sans-serif; font-size:42px; font-weight:900; background:linear-gradient(135deg,var(--accent-orange),var(--accent-red)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1; }
+    .rating-stars { color:var(--accent-orange); font-size:18px; letter-spacing:3px; margin:6px 0; }
+    .rating-count { font-size:12px; color:var(--text-muted); font-weight:600; }
+    .benefits { display:flex; flex-direction:column; gap:20px; }
+    .benefit { display:flex; gap:16px; background:var(--glass-bg); border:1px solid var(--border-color); border-radius:16px; padding:20px; backdrop-filter:blur(12px); transition:all 0.3s; }
+    .benefit:hover { border-color:rgba(255,159,28,0.2); transform:translateX(6px); }
+    .benefit-icon-box { width:44px; height:44px; border-radius:12px; background:rgba(255,159,28,0.1); border:1px solid rgba(255,159,28,0.15); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .benefit-text h4 { font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+    .benefit-text p { font-size:13px; color:var(--text-muted); line-height:1.5; }
 
     /* ══════════════════════════════════
-       WHY US - TYPOGRAPHY FOCUS
+       REVIEWS
     ══════════════════════════════════ */
-    .why-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .why-img { border-radius: 8px; filter: grayscale(100%); transition: filter 0.5s; width: 100%; height: 600px; object-fit: cover; }
-    .why-inner:hover .why-img { filter: grayscale(0%); }
-    .benefit-item { margin-bottom: 32px; position: relative; padding-left: 24px; }
-    .benefit-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; transition: transform 0.3s; }
-    .benefit-item:hover::before { transform: scale(2); background: var(--accent-orange); }
-    .benefit-item h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-    .benefit-item p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-
-    /* ══════════════════════════════════
-       REVIEWS - CLEAN CARDS
-    ══════════════════════════════════ */
-    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .review-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.4s var(--transition-bezier); }
-    .review-card:hover { transform: translateY(-8px); border-color: var(--border-hover); }
-    .review-text { font-size: 16px; line-height: 1.6; color: var(--text-muted); margin-bottom: 32px; }
-    .review-author { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .reviews-section { background:var(--bg-card); padding:100px 5%; border-top:1px solid var(--border-color); border-bottom:1px solid var(--border-color); }
+    .reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .review-card { background:var(--glass-bg); border:1px solid var(--border-color); border-radius:20px; padding:28px; backdrop-filter:blur(12px); transition:all 0.3s; }
+    .review-card:hover { border-color:rgba(255,159,28,0.2); transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.3); }
+    .review-stars { color:var(--accent-orange); font-size:16px; letter-spacing:2px; margin-bottom:14px; }
+    .review-text { font-size:14px; line-height:1.7; color:#d1d5db; font-style:italic; margin-bottom:20px; }
+    .review-author { display:flex; align-items:center; gap:12px; }
+    .review-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent-orange),var(--accent-red)); display:flex; align-items:center; justify-content:center; font-weight:800; color:#000; font-size:15px; flex-shrink:0; }
+    .review-name { font-size:14px; font-weight:700; color:#fff; }
+    .review-date { font-size:12px; color:var(--text-muted); }
+    .google-badge { display:flex; align-items:center; gap:8px; margin-top:8px; }
+    .google-badge span { font-size:11px; color:var(--text-muted); font-weight:600; }
 
     /* ══════════════════════════════════
        COVERAGE CTA
     ══════════════════════════════════ */
-    .cta-section { background: var(--text-main); color: #000; text-align: center; padding: 120px 5%; }
-    .cta-inner { max-width: 800px; margin: 0 auto; }
-    .cta-h2 { font-family: 'Outfit', sans-serif; font-size: 56px; font-weight: 900; line-height: 1; margin-bottom: 24px; letter-spacing: -2px; }
-    .cta-p { font-size: 18px; color: #333; margin-bottom: 40px; line-height: 1.5; }
-    
-    .btn-dark { background: #000; color: #fff; padding: 20px 40px; font-size: 18px; font-weight: 800; border-radius: 8px; }
-    .btn-dark:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.3); background: var(--accent-orange); }
+    .coverage-cta { padding:100px 5%; background:radial-gradient(ellipse at 50% 0%,rgba(255,94,54,0.08),transparent 60%); }
+    .coverage-cta-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+    .coverage-left h2 { font-family:'Outfit',sans-serif; font-size:44px; font-weight:800; background:linear-gradient(135deg,#fff 50%,rgba(255,255,255,0.4)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px; }
+    .coverage-left p { font-size:16px; color:var(--text-muted); line-height:1.6; margin-bottom:32px; }
+    .city-pills { display:flex; flex-wrap:wrap; gap:10px; }
+    .city-pill { background:var(--glass-bg); border:1px solid var(--border-color); padding:8px 16px; border-radius:30px; font-size:13px; color:var(--text-muted); font-weight:500; backdrop-filter:blur(8px); transition:all 0.2s; cursor:default; }
+    .city-pill:hover { border-color:rgba(255,159,28,0.3); color:var(--accent-orange); }
+    .coverage-right { background:linear-gradient(135deg,rgba(255,94,54,0.1),rgba(13,17,23,0.95)); border:1px solid rgba(255,94,54,0.2); border-radius:28px; padding:48px; backdrop-filter:blur(16px); display:flex; flex-direction:column; gap:28px; position:relative; overflow:hidden; }
+    .coverage-right::before { content:''; position:absolute; top:-40%; right:-40%; width:80%; height:80%; background:radial-gradient(circle,rgba(255,94,54,0.12),transparent 60%); pointer-events:none; }
+    .emergency-label { display:flex; align-items:center; gap:8px; }
+    .green-dot { width:10px; height:10px; background:#10b981; border-radius:50%; box-shadow:0 0 12px #10b981; animation:blink 1.2s infinite; }
+    @keyframes blink { 0%,100%{opacity:0.3;} 50%{opacity:1;transform:scale(1.2);} }
+    .emergency-label span { font-size:13px; font-weight:700; color:#fff; letter-spacing:0.5px; }
+    .coverage-right h3 { font-family:'Outfit',sans-serif; font-size:30px; font-weight:800; color:#fff; line-height:1.25; }
+    .coverage-right p { font-size:14px; color:var(--text-muted); line-height:1.65; }
+    .btn-call { display:inline-flex; align-items:center; justify-content:center; gap:14px; background:linear-gradient(135deg,var(--accent-orange),var(--accent-red)); color:#000; padding:22px 36px; border-radius:14px; font-size:22px; font-weight:900; box-shadow:0 10px 32px rgba(255,94,54,0.35); transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); border:1px solid rgba(255,255,255,0.2); }
+    .btn-call:hover { transform:translateY(-4px) scale(1.02); box-shadow:0 16px 44px rgba(255,94,54,0.45); }
+    .btn-call svg { width:28px; height:28px; fill:#000; animation:shake 1.5s infinite; }
+    .btn-wa { display:inline-flex; align-items:center; justify-content:center; gap:12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); color:#10b981; padding:16px 28px; border-radius:12px; font-size:15px; font-weight:700; transition:all 0.2s; }
+    .btn-wa:hover { background:#10b981; color:#000; transform:translateY(-2px); }
+    .btn-wa svg { width:20px; height:20px; fill:currentColor; }
 
     /* ══════════════════════════════════
-       FOOTER - MINIMAL
+       FOOTER
     ══════════════════════════════════ */
-    footer { padding: 80px 5% 40px; border-top: 1px solid var(--border-color); }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 64px; }
-    .f-logo { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; margin-bottom: 16px; display: block; color: var(--text-main); }
-    .f-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 300px; }
-    .f-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; color: var(--text-muted); }
-    .f-links { list-style: none; display: flex; flex-direction: column; gap: 16px; }
-    .f-links a { color: var(--text-main); font-size: 14px; font-weight: 500; transition: color 0.3s, transform 0.3s; display: inline-block; }
-    .f-links a:hover { color: var(--accent-orange); transform: translateX(4px); }
-    .f-bottom { border-top: 1px solid var(--border-color); padding-top: 32px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+    footer { background:var(--bg-card); border-top:1px solid var(--border-color); padding:60px 5% 32px; }
+    .footer-inner { max-width:1200px; margin:0 auto; }
+    .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+    .footer-brand p { font-size:14px; color:var(--text-muted); line-height:1.65; margin-top:16px; max-width:280px; }
+    .footer-logo-text { font-family:'Outfit',sans-serif; font-size:22px; font-weight:900; }
+    .footer-logo-text .sos { background:linear-gradient(135deg,var(--accent-orange),var(--accent-red)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .footer-logo-text .rest { color:var(--text-main); }
+    .footer-col h5 { font-size:13px; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .footer-col ul li a { font-size:14px; color:var(--text-muted); transition:color 0.2s; }
+    .footer-col ul li a:hover { color:var(--accent-orange); }
+    .footer-divider { border:none; border-top:1px solid var(--border-color); margin-bottom:24px; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .footer-bottom p { font-size:12px; color:var(--text-muted); }
 
     /* ══════════════════════════════════
-       UX ANIMATION CLASSES (INTERSECTION OBSERVER)
+       SCROLL ANIMATIONS
     ══════════════════════════════════ */
-    .anim-reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--transition-bezier); }
-    .anim-reveal.is-visible { opacity: 1; transform: translateY(0); }
-    
-    .anim-scale { opacity: 0; transform: scale(0.95); transition: all 0.8s var(--transition-bezier); }
-    .anim-scale.is-visible { opacity: 1; transform: scale(1); }
+    .fade-up { opacity:0; transform:translateY(32px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity:1; transform:translateY(0); }
 
-    .anim-stagger > * { opacity: 0; transform: translateY(30px); transition: all 0.6s var(--transition-bezier); }
-    .anim-stagger.is-visible > * { opacity: 1; transform: translateY(0); }
-    .anim-stagger.is-visible > *:nth-child(1) { transition-delay: 0.1s; }
-    .anim-stagger.is-visible > *:nth-child(2) { transition-delay: 0.2s; }
-    .anim-stagger.is-visible > *:nth-child(3) { transition-delay: 0.3s; }
-    .anim-stagger.is-visible > *:nth-child(4) { transition-delay: 0.4s; }
-
-    /* RESPONSIVE */
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
     @media(max-width:1024px) {
-      .hero-inner, .why-inner { grid-template-columns: 1fr; }
-      .hero-right { max-width: 600px; margin: 0 auto; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      .hero-h1 { font-size: 56px; }
+      .hero-inner { grid-template-columns:1fr; text-align:center; }
+      .hero-left { align-items:center; }
+      .hero-right { display:none; }
+      .why-inner { grid-template-columns:1fr; }
+      .coverage-cta-inner { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr 1fr; }
     }
     @media(max-width:768px) {
-      .services-grid, .reviews-grid, .footer-grid { grid-template-columns: 1fr; }
-      .stats-inner { grid-template-columns: repeat(2, 1fr); }
-      .hero-h1 { font-size: 44px; }
-      .section-title { font-size: 36px; }
-      .cta-h2 { font-size: 40px; }
-      .step-row { grid-template-columns: 1fr; gap: 16px; }
-      .nav-links, .nav-cta { display: none; }
-      .hamburger { display: flex; }
+      .hero-h1 { font-size:40px; }
+      .section-title { font-size:32px; }
+      .services-grid { grid-template-columns:1fr; }
+      .steps-grid { grid-template-columns:repeat(2,1fr); }
+      .steps-grid::before { display:none; }
+      .reviews-grid { grid-template-columns:1fr; }
+      .stats-inner { grid-template-columns:repeat(2,1fr); }
+      .footer-grid { grid-template-columns:1fr; gap:32px; }
+    }
+    @media(max-width:480px) {
+      .hero-h1 { font-size:32px; }
+      .btn-primary, .btn-ghost { width:100%; justify-content:center; }
     }
   </style>
 </head>
 <body>
 
-<div class="page-loader" id="loader">
-  <div class="loader-text"><span>SOS Auto Bologna</span></div>
-</div>
-
+<!-- NAV -->
 <nav id="navbar">
-  <a class="nav-logo" href="home-complete2.html">SOS Auto Bologna</a>
+  <a class="nav-logo" href="home-complete2.html">
+    <span class="sos">SOS</span><span class="rest"> Auto Bologna</span>
+  </a>
   <ul class="nav-links">
     <li><a href="home-complete2.html" class="active">Home</a></li>
     <li><a href="services-complete2.html">Servizi</a></li>
-    <li><a href="coverage-contact-complete2.html">Copertura</a></li>
+    <li><a href="coverage-contact-complete2.html">Copertura & Contatti</a></li>
   </ul>
-  <a class="btn btn-solid nav-cta" href="tel:+393780937934">Chiama Ora</a>
+  <a class="nav-cta" href="tel:+393780937934">📞 Chiama Ora</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home-complete2.html" class="active">Home</a>
+  <a href="services-complete2.html">Servizi</a>
+  <a href="coverage-contact-complete2.html">Copertura & Contatti</a>
+  <a href="tel:+393780937934" style="color:var(--accent-orange);font-weight:800;">📞 +39 378 093 7934</a>
+</div>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-left">
+    <div class="hero-left fade-up">
       <div class="live-badge">
         <span class="live-dot"></span>
-        <span>Attivo 24/7</span>
+        <span>Attivo 24 ore su 24 — 7 giorni su 7</span>
       </div>
       <h1 class="hero-h1">
-        <span>Bloccato fuori?</span>
-        <span>Arriviamo in 20 min.</span>
+        <span class="white">Bloccato fuori<br>dalla tua auto?</span><br>
+        <span class="orange">Arriviamo in 20 min.</span>
       </h1>
-      <p class="hero-sub">Assistenza auto d'emergenza professionale su Bologna e provincia. Apertura porte senza scasso, avvio batteria, chiavi. Zero danni, attrezzature pro.</p>
+      <p class="hero-sub">
+        Assistenza auto d'emergenza professionale su Bologna e provincia. Apertura porte senza danni, avvio batteria, duplicazione chiavi — con attrezzature specializzate e tecnici certificati.
+      </p>
       <div class="hero-btns">
-        <a class="btn btn-solid" href="tel:+393780937934">Chiama +39 378 093 7934</a>
-        <a class="btn btn-outline" href="services-complete2.html">Vedi Servizi</a>
+        <a class="btn-primary" href="tel:+393780937934">
+          <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+          +39 378 093 7934
+        </a>
+        <a class="btn-ghost" href="services-complete2.html">Scopri i Servizi →</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-pill"><span class="ico">⭐</span> 5.0 su Google</div>
+        <div class="trust-pill"><span class="ico">🛡️</span> Senza Danni Garantiti</div>
+        <div class="trust-pill"><span class="ico">⚡</span> 20 Min. su Bologna</div>
       </div>
     </div>
-    <div class="hero-right">
+    <div class="hero-right fade-up" style="transition-delay:0.2s">
       <div class="hero-img-frame">
-        <img src="assets/hero_lockout.png" alt="Apertura Porta">
+        <img src="assets/hero_lockout.png" alt="Tecnico SOS Auto Bologna - Apertura Porta Auto di Emergenza">
       </div>
       <div class="float-card float-card-1">
-        <div class="fc-title">20 min</div>
-        <div class="fc-sub">Tempo Medio Arrivo</div>
+        <span class="fc-icon">⚡</span>
+        <div>
+          <h4>Intervento Rapido</h4>
+          <p>Tempo medio ~20 minuti</p>
+        </div>
       </div>
       <div class="float-card float-card-2">
-        <div class="fc-title">5.0★</div>
-        <div class="fc-sub">Valutazione Google</div>
+        <div class="fc-num">5.0★</div>
+        <p>Rating Google</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- STATS BAR -->
 <div class="stats-bar">
-  <div class="stats-inner anim-stagger">
-    <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">Interventi</span></div>
-    <div class="stat-item"><span class="stat-num">20'</span><span class="stat-label">Arrivo Medio</span></div>
-    <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Province</span></div>
-    <div class="stat-item"><span class="stat-num">H24</span><span class="stat-label">Disponibilità</span></div>
+  <div class="stats-inner">
+    <div class="stat-item fade-up"><span class="stat-num">500+</span><span class="stat-label">Interventi Completati</span></div>
+    <div class="stat-item fade-up"><span class="stat-num">20'</span><span class="stat-label">Tempo Medio Arrivo</span></div>
+    <div class="stat-item fade-up"><span class="stat-num">5.0★</span><span class="stat-label">Valutazione Google</span></div>
+    <div class="stat-item fade-up"><span class="stat-num">H24</span><span class="stat-label">Disponibilità Continua</span></div>
   </div>
 </div>
 
+<!-- SERVICES -->
 <section class="section">
   <div class="section-inner">
-    <div class="section-head anim-reveal">
-      <span class="section-tag">I Servizi</span>
-      <h2 class="section-title">Emergenza risolta.</h2>
-    </div>
-    <div class="services-grid anim-stagger">
-      <div class="srv-card" onclick="location.href='services-complete2.html'">
-        <div class="srv-img-wrap"><img class="srv-img" src="assets/hero_lockout.png" alt="Apertura"></div>
+    <span class="section-tag fade-up">I Nostri Servizi</span>
+    <h2 class="section-title fade-up">Tutto quello che ti serve<br>in un'emergenza auto</h2>
+    <p class="section-sub fade-up">Tre servizi specializzati, un unico numero da chiamare. Tecnici certificati con attrezzature professionali che garantiscono zero danni al veicolo.</p>
+    <div class="services-grid">
+      <!-- Card 1 -->
+      <div class="srv-card fade-up">
+        <div class="srv-img-wrap">
+          <img class="srv-img" src="assets/hero_lockout.png" alt="Apertura Porte Auto Bologna">
+        </div>
         <div class="srv-body">
-          <h3 class="srv-name">Apertura Porte</h3>
-          <p class="srv-desc">Sblocco portiere senza scasso. Cuscini d'aria calibrati e grimaldelli decoder per zero danni alla lamiera.</p>
-          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+          <div class="srv-icon">🔑</div>
+          <h3 class="srv-name">Apertura Porte Auto</h3>
+          <p class="srv-desc">Sblocco serrature e apertura portiere di qualsiasi auto senza scasso. Utilizziamo grimaldelli Lishi e cuscini d'aria calibrati — zero graffi, zero danni.</p>
+          <ul class="srv-features">
+            <li>Tecnica a cuscino d'aria professionale</li>
+            <li>Tutti i marchi e modelli</li>
+            <li>Nessun danno garantito per iscritto</li>
+            <li>Preventivo al telefono prima dell'intervento</li>
+          </ul>
+          <a class="srv-cta" href="services-complete2.html">Scopri di più →</a>
         </div>
       </div>
-      <div class="srv-card" onclick="location.href='services-complete2.html'">
-        <div class="srv-img-wrap"><img class="srv-img" src="assets/battery_service.png" alt="Batteria"></div>
+      <!-- Card 2 -->
+      <div class="srv-card fade-up" style="transition-delay:0.1s">
+        <div class="srv-img-wrap">
+          <img class="srv-img" src="assets/battery_service.png" alt="Avvio Batteria Bologna">
+        </div>
         <div class="srv-body">
-          <h3 class="srv-name">Avvio Batteria</h3>
-          <p class="srv-desc">Booster professionali ad alto spunto per avviare il veicolo senza danneggiare le centraline elettroniche.</p>
-          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+          <div class="srv-icon">🔋</div>
+          <h3 class="srv-name">Avvio Batteria Scarica</h3>
+          <p class="srv-desc">Batteria a terra? Arriviamo con booster professionali ad alto spunto che avviano il tuo veicolo senza danneggiare la centralina elettronica.</p>
+          <ul class="srv-features">
+            <li>Booster professionale ad alto spunto</li>
+            <li>Controllo base alternatore incluso</li>
+            <li>Disponibile H24, 365 giorni l'anno</li>
+            <li>Intervento in 25 minuti</li>
+          </ul>
+          <a class="srv-cta" href="services-complete2.html">Scopri di più →</a>
         </div>
       </div>
-      <div class="srv-card" onclick="location.href='services-complete2.html'">
-        <div class="srv-img-wrap"><img class="srv-img" src="assets/key_duplication.png" alt="Chiavi"></div>
+      <!-- Card 3 -->
+      <div class="srv-card fade-up" style="transition-delay:0.2s">
+        <div class="srv-img-wrap">
+          <img class="srv-img" src="assets/key_duplication.png" alt="Duplicazione Chiavi Auto Bologna">
+        </div>
         <div class="srv-body">
+          <div class="srv-icon">🗝️</div>
           <h3 class="srv-name">Duplicazione Chiavi</h3>
-          <p class="srv-desc">Ricostruzione chiavi da zero, programmazione transponder e telecomando direttamente sul posto.</p>
-          <div class="srv-link">Scopri di più <span class="arrow">→</span></div>
+          <p class="srv-desc">Chiavi perse o rotte? Con il nostro chiavista convenzionato a Bologna rifacciamo le chiavi da zero, inclusa la programmazione transponder e telecomando.</p>
+          <ul class="srv-features">
+            <li>Clonazione chip transponder</li>
+            <li>Programmazione via porta OBD</li>
+            <li>Chiavi con telecomando e smart key</li>
+            <li>Ricostruzione da serratura</li>
+          </ul>
+          <a class="srv-cta" href="services-complete2.html">Scopri di più →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section how-section">
+<!-- HOW IT WORKS -->
+<section class="how-section">
   <div class="section-inner">
-    <div class="section-head anim-reveal">
-      <span class="section-tag">Il Processo</span>
-      <h2 class="section-title">Come funziona</h2>
+    <span class="section-tag fade-up" style="text-align:center;display:block;">Come Funziona</span>
+    <h2 class="section-title fade-up" style="text-align:center;margin:0 auto 16px;">In 4 semplici passi<br>sei di nuovo in marcia</h2>
+    <p class="section-sub fade-up" style="text-align:center;margin:0 auto 64px;">Dal momento in cui chiami, gestiamo tutto noi. Veloce, professionale, trasparente.</p>
+    <div class="steps-grid">
+      <div class="step-card fade-up">
+        <div class="step-num-wrap"><span class="step-num">01</span></div>
+        <div class="step-icon">📞</div>
+        <h3 class="step-h">Chiama o scrivi</h3>
+        <p class="step-p">Contattaci al +39 378 093 7934 o via WhatsApp. Rispondiamo subito, 24 ore su 24.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:0.1s">
+        <div class="step-num-wrap"><span class="step-num">02</span></div>
+        <div class="step-icon">📍</div>
+        <h3 class="step-h">Indica la posizione</h3>
+        <p class="step-p">Inviaci la tua posizione GPS o descrivi dove ti trovi. Ti daremo il tempo stimato di arrivo preciso.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:0.2s">
+        <div class="step-num-wrap"><span class="step-num">03</span></div>
+        <div class="step-icon">🚗</div>
+        <h3 class="step-h">Il tecnico arriva</h3>
+        <p class="step-p">Il nostro tecnico più vicino raggiunge la tua posizione in media in 20 minuti su Bologna città.</p>
+      </div>
+      <div class="step-card fade-up" style="transition-delay:0.3s">
+        <div class="step-num-wrap"><span class="step-num">04</span></div>
+        <div class="step-icon">✅</div>
+        <h3 class="step-h">Problema risolto</h3>
+        <p class="step-p">Intervento rapido e professionale. Accettiamo contanti, bancomat, carte di credito e pagamenti digitali.</p>
+      </div>
     </div>
-    <div class="steps-list anim-stagger">
-      <div class="step-row">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <h3>Chiama o scrivi</h3>
-          <p>Un operatore risponde sempre, H24. Indica il problema e la posizione per avere subito un preventivo trasparente.</p>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-left fade-up">
+      <span class="section-tag">Perché Sceglierci</span>
+      <h2 class="section-title">La scelta di centinaia<br>di bolognesi</h2>
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-icon-box">🛡️</div>
+          <div class="benefit-text">
+            <h4>Nessun Danno Garantito</h4>
+            <p>Utilizziamo esclusivamente attrezzature professionali certificate. Zero graffi, zero danni alla lamiera o alle guarnizioni.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon-box">💰</div>
+          <div class="benefit-text">
+            <h4>Prezzi Trasparenti</h4>
+            <p>Preventivo chiaro al telefono prima di partire. Nessun costo nascosto o sorpresa finale. Paghi solo quello che ti diciamo.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon-box">⚡</div>
+          <div class="benefit-text">
+            <h4>Risposta Immediata H24</h4>
+            <p>Disponibili ogni giorno dell'anno, anche la notte di Natale. Rispondiamo al telefono sempre, senza eccezioni.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon-box">🏆</div>
+          <div class="benefit-text">
+            <h4>5 Stelle su Google</h4>
+            <p>Valutazione perfetta su Google con decine di recensioni verificate. La soddisfazione dei clienti è la nostra priorità.</p>
+          </div>
         </div>
       </div>
-      <div class="step-row">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <h3>Arrivo in 20 minuti</h3>
-          <p>Il tecnico più vicino parte immediatamente. Copriamo Bologna città in media in soli 20 minuti dalla chiamata.</p>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <h3>Risoluzione e pagamento</h3>
-          <p>Risolviamo il problema senza danni. Verifichi il lavoro e paghi comodamente con POS, contanti o carte.</p>
+    </div>
+    <div class="why-right fade-up" style="transition-delay:0.15s">
+      <div class="why-img-wrap">
+        <img src="assets/team_technician.png" alt="Tecnico SOS Auto Bologna">
+        <div class="rating-overlay">
+          <div class="rating-big">5.0</div>
+          <div class="rating-stars">★★★★★</div>
+          <div class="rating-count">Valutazione Google Maps</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-inner why-inner">
-    <div class="anim-reveal">
-      <div class="section-head" style="margin-bottom: 40px;">
-        <span class="section-tag">Perché Noi</span>
-        <h2 class="section-title">La scelta giusta.</h2>
-      </div>
-      <div class="benefit-item">
-        <h4>Nessun Danno Garantito</h4>
-        <p>Zero graffi, tecniche professionali e strumentazione aggiornata per lavorare in totale sicurezza sul tuo veicolo.</p>
-      </div>
-      <div class="benefit-item">
-        <h4>Prezzi Trasparenti</h4>
-        <p>Preventivo esatto comunicato al telefono prima dell'intervento. Nessuna sorpresa o costo nascosto finale.</p>
-      </div>
-      <div class="benefit-item">
-        <h4>Copertura Regionale</h4>
-        <p>Non solo Bologna: copriamo stabilmente anche le province di Modena, Ferrara e Ravenna con tecnici dedicati.</p>
-      </div>
-    </div>
-    <div class="anim-scale">
-      <img class="why-img" src="assets/team_technician.png" alt="Tecnico">
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background: var(--bg-card);">
+<!-- REVIEWS -->
+<section class="reviews-section">
   <div class="section-inner">
-    <div class="section-head anim-reveal">
-      <span class="section-tag">Recensioni</span>
-      <h2 class="section-title">Parola ai clienti.</h2>
-    </div>
-    <div class="reviews-grid anim-stagger">
-      <div class="review-card">
-        <p class="review-text">"Rimasto chiuso fuori dall'auto alle 2 di notte. In 25 minuti il tecnico era da me. Prezzo onesto e lavoro pulitissimo."</p>
-        <div class="review-author">Marco T. — Bologna</div>
+    <span class="section-tag fade-up" style="text-align:center;display:block;">Recensioni Verificate</span>
+    <h2 class="section-title fade-up" style="text-align:center;margin:0 auto 16px;">Cosa dicono i nostri clienti</h2>
+    <p class="section-sub fade-up" style="text-align:center;margin:0 auto 56px;">Recensioni reali da Google Maps. Ogni intervento viene completato con professionalità e rispetto per il veicolo del cliente.</p>
+    <div class="reviews-grid">
+      <div class="review-card fade-up">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Rimasto chiuso fuori dall'auto alle 2 di notte. Ho chiamato SOS Auto Bologna e in meno di 25 minuti il tecnico era già da me. Professionale, veloce e il prezzo era esattamente quello comunicato al telefono. Consigliatissimo!"</p>
+        <div class="review-author">
+          <div class="review-avatar">M</div>
+          <div>
+            <div class="review-name">Marco T.</div>
+            <div class="review-date">Bologna · Google Maps</div>
+          </div>
+        </div>
       </div>
-      <div class="review-card">
-        <p class="review-text">"Batteria morta nel parcheggio del centro commerciale. Booster professionale e in un attimo l'auto è ripartita. Salvavita."</p>
-        <div class="review-author">Sara L. — Modena</div>
+      <div class="review-card fade-up" style="transition-delay:0.1s">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Batteria scarica in un parcheggio di Modena. In 30 minuti il tecnico era lì con il booster. Ha anche controllato l'alternatore e mi ha spiegato tutto. Ottimo servizio, prezzi onesti. Salvavita letteralmente!"</p>
+        <div class="review-author">
+          <div class="review-avatar">S</div>
+          <div>
+            <div class="review-name">Sara L.</div>
+            <div class="review-date">Modena · Google Maps</div>
+          </div>
+        </div>
       </div>
-      <div class="review-card">
-        <p class="review-text">"Hanno rifatto la mia chiave smart key persa sul posto. Rapidi, professionali e decisamente più comodi della concessionaria."</p>
-        <div class="review-author">Andrea P. — Ravenna</div>
+      <div class="review-card fade-up" style="transition-delay:0.2s">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Ho perso le chiavi dell'auto. Grazie a SOS Auto Bologna hanno prima aperto l'auto e poi tramite il loro chiavista convenzionato hanno rifatto le chiavi con transponder. Tutto in poche ore. Servizio completo e affidabile."</p>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Andrea P.</div>
+            <div class="review-date">Bologna · Google Maps</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta-section anim-reveal">
-  <div class="cta-inner">
-    <h2 class="cta-h2">Emergenza in corso?</h2>
-    <p class="cta-p">Non perdere tempo. Il nostro tecnico è pronto a partire.</p>
-    <a href="tel:+393780937934" class="btn btn-dark">Chiama Ora: +39 378 093 7934</a>
+<!-- COVERAGE + CTA -->
+<section class="coverage-cta">
+  <div class="coverage-cta-inner">
+    <div class="coverage-left fade-up">
+      <span class="section-tag">Area di Copertura</span>
+      <h2>Interveniamo in tutta l'Emilia-Romagna</h2>
+      <p>La nostra flotta di tecnici è distribuita strategicamente per coprire Bologna città e tutta la provincia, oltre alle province limitrofe di Modena, Ferrara e Ravenna.</p>
+      <div class="city-pills">
+        <span class="city-pill">📍 Bologna</span>
+        <span class="city-pill">📍 Modena</span>
+        <span class="city-pill">📍 Ferrara</span>
+        <span class="city-pill">📍 Ravenna</span>
+        <span class="city-pill">📍 Imola</span>
+        <span class="city-pill">📍 Lugo</span>
+        <span class="city-pill">📍 Faenza</span>
+        <span class="city-pill">📍 San Lazzaro</span>
+        <span class="city-pill">📍 Casalecchio</span>
+        <span class="city-pill">📍 Sasso Marconi</span>
+        <span class="city-pill">📍 Castel Maggiore</span>
+        <span class="city-pill">📍 Cento</span>
+      </div>
+    </div>
+    <div class="coverage-right fade-up" style="transition-delay:0.15s">
+      <div class="emergency-label">
+        <span class="green-dot"></span>
+        <span>Operatori Disponibili Adesso</span>
+      </div>
+      <h3>Hai bisogno di assistenza immediata?</h3>
+      <p>Un nostro operatore risponde immediatamente. Ti daremo il tempo di arrivo preciso e il preventivo al telefono, prima ancora di partire.</p>
+      <a class="btn-call" href="tel:+393780937934">
+        <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+        +39 378 093 7934
+      </a>
+      <a class="btn-wa" href="https://wa.me/393780937934" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.14 8.14 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24-1.44 0-2.85-.38-4.09-1.11l-.29-.17-3.05.8 1.83-1.8-.19-.3A8.212 8.212 0 0 1 3.73 11.9c0-4.53 3.7-8.23 8.24-8.23m-3.8 3.9c-.21 0-.42.06-.59.2-.18.15-.38.38-.38.77 0 .8.5 1.58.57 1.68.07.1 1.39 2.13 3.38 2.99.47.2.84.32 1.13.41.48.15.91.13 1.25.08.38-.06 1.17-.48 1.33-.94.16-.47.16-.87.11-.96-.04-.08-.16-.13-.34-.23-.18-.1-.1-.47-.83-.8-.16-.07-.29-.1-.41.1-.12.18-.46.59-.57.7-.1.12-.21.13-.39.03-.18-.1-.76-.28-1.45-.9-.54-.48-.9-1.07-.98-1.22-.09-.15-.01-.23.08-.32.08-.08.18-.21.27-.32.09-.1.12-.18.18-.3.06-.12.03-.23-.01-.32-.04-.09-.38-.92-.53-1.27-.14-.35-.3-.3-.41-.3"/></svg>
+        Scrivici su WhatsApp
+      </a>
+    </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="section-inner footer-grid">
-    <div>
-      <a href="home-complete2.html" class="f-logo">SOS Auto Bologna</a>
-      <p class="f-desc">Assistenza auto d'emergenza professionale. Attivi 24/7 su Bologna, Modena, Ferrara, Ravenna.</p>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text"><span class="sos">SOS</span><span class="rest"> Auto Bologna</span></div>
+        <p>Assistenza auto d'emergenza professionale su Bologna e provincia. Attivi 24 ore su 24, 7 giorni su 7, 365 giorni l'anno.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Servizi</h5>
+        <ul>
+          <li><a href="services-complete2.html">Apertura Porte Auto</a></li>
+          <li><a href="services-complete2.html">Avvio Batteria</a></li>
+          <li><a href="services-complete2.html">Duplicazione Chiavi</a></li>
+          <li><a href="services-complete2.html">Tutti i Servizi</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Aree Servite</h5>
+        <ul>
+          <li><a href="coverage-contact-complete2.html">Bologna</a></li>
+          <li><a href="coverage-contact-complete2.html">Modena</a></li>
+          <li><a href="coverage-contact-complete2.html">Ferrara</a></li>
+          <li><a href="coverage-contact-complete2.html">Ravenna</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contatti</h5>
+        <ul>
+          <li><a href="tel:+393780937934">📞 +39 378 093 7934</a></li>
+          <li><a href="https://wa.me/393780937934" target="_blank">💬 WhatsApp</a></li>
+          <li><a href="mailto:info@assistenzaautosos.it">✉️ Email</a></li>
+          <li><a href="coverage-contact-complete2.html">📍 Copertura</a></li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <div class="f-title">Servizi</div>
-      <ul class="f-links">
-        <li><a href="services-complete2.html">Apertura Porte</a></li>
-        <li><a href="services-complete2.html">Avvio Batteria</a></li>
-        <li><a href="services-complete2.html">Duplicazione Chiavi</a></li>
-      </ul>
+    <hr class="footer-divider">
+    <div class="footer-bottom">
+      <p>© 2026 Assistenza Auto SOS Bologna · P.IVA IT12345678901 · Servizio H24</p>
+      <p>Fabbro Auto Bologna · Apertura Porte Auto Bologna · Avvio Batteria Bologna</p>
     </div>
-    <div>
-      <div class="f-title">Azienda</div>
-      <ul class="f-links">
-        <li><a href="coverage-contact-complete2.html">Copertura & Contatti</a></li>
-        <li><a href="tel:+393780937934">Chiama Ora</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="section-inner f-bottom">
-    <div>© 2026 Assistenza Auto SOS Bologna</div>
-    <div>P.IVA IT12345678901</div>
   </div>
 </footer>
 
 <script>
-  // Page load animation
-  window.addEventListener('load', () => {
-    setTimeout(() => { document.getElementById('loader').classList.add('loaded'); }, 1000);
-  });
-
-  // Nav scroll
+  // Navbar scroll effect
   window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
   });
-
-  // Intersection Observer for animations
+  // Mobile menu
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+  // Scroll animations
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target); // Play once
-      }
-    });
-  }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-
-  document.querySelectorAll('.anim-reveal, .anim-scale, .anim-stagger').forEach(el => observer.observe(el));
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>

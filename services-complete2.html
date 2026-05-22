@@ -3,210 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Servizi - SOS Auto Bologna | Apertura Porte, Batteria, Chiavi H24</title>
+  <title>Servizi - SOS Auto Bologna</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #000000; --bg-card: #0a0a0a; --bg-card-hover: #111111;
-      --accent-orange: #ff6b00; --accent-red: #e63900;
-      --text-main: #ffffff; --text-muted: #888888;
-      --border-color: #1a1a1a; --border-hover: #333333;
-      --transition-bezier: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg-dark: #080b11;
+      --bg-card: #0d1117;
+      --accent-orange: #ff9f1c;
+      --accent-red: #ff5e36;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(17, 24, 39, 0.6);
+      --glow-orange: rgba(255, 159, 28, 0.25);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    html { scroll-behavior: smooth; } body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
-    a { text-decoration: none; -webkit-tap-highlight-color: transparent; } img { max-width: 100%; display: block; }
-
-    /* PAGE LOAD ANIMATION */
-    .page-loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: transform 0.8s var(--transition-bezier); }
-    .page-loader.loaded { transform: translateY(-100%); }
-    .loader-text { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; overflow: hidden; }
-    .loader-text span { display: inline-block; transform: translateY(100%); animation: revealText 0.8s var(--transition-bezier) forwards; }
-    @keyframes revealText { to { transform: translateY(0); } }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
+    a { -webkit-tap-highlight-color: transparent; text-decoration: none; }
 
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 5%; height: 80px; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: space-between; transition: background 0.4s var(--transition-bezier), height 0.4s var(--transition-bezier); }
-    nav.scrolled { background: rgba(0,0,0,0.95); height: 70px; border-bottom: 1px solid var(--border-color); }
-    .nav-logo { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; color: var(--text-main); }
-    .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 600; position: relative; display: inline-block; transition: color 0.3s; }
-    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--text-main); transform: translateX(-100%); transition: transform 0.4s var(--transition-bezier); }
-    .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
-    .nav-links a:hover::after, .nav-links a.active::after { transform: translateX(0); }
-    
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; font-weight: 700; border-radius: 8px; transition: all 0.4s var(--transition-bezier); cursor: pointer; position: relative; overflow: hidden; z-index: 1; }
-    .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; transition: transform 0.4s var(--transition-bezier); transform-origin: left; }
-    .btn-solid { background: var(--text-main); color: #000; padding: 14px 28px; font-size: 15px; }
-    .btn-solid::before { background: var(--accent-orange); transform: scaleX(0); }
-    .btn-solid:hover { color: #fff; transform: translateY(-4px); box-shadow: 0 12px 24px rgba(255,107,0,0.2); }
-    .btn-solid:hover::before { transform: scaleX(1); }
-    @media(max-width:768px){ .nav-links, .nav-cta { display:none; } }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 5%; height: 70px;
+      background: rgba(8, 11, 17, 0.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; }
+    .nav-logo .sos { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-logo .rest { color: var(--text-main); }
 
-    /* TYPOGRAPHY & LAYOUT */
-    .section { padding: 140px 5% 80px; }
-    .section-inner { max-width: 1200px; margin: 0 auto; }
-    .page-h1 { font-family: 'Outfit', sans-serif; font-size: 64px; font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 24px; overflow: hidden; }
-    .page-h1 span { display: block; transform: translateY(100%); animation: slideUp 0.8s var(--transition-bezier) forwards; }
-    .page-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 600px; opacity: 0; animation: fadeIn 1s 0.4s forwards; }
+    /* ALL NAV LINKS — VISIBLE BUT COMPLETELY NON-CLICKABLE */
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 14px; font-weight: 500;
+      position: relative; padding-bottom: 3px;
+      /* Disable all interaction */
+      pointer-events: none !important;
+      cursor: default !important;
+      -webkit-user-select: none; user-select: none;
+    }
+    .nav-links a.active { color: var(--text-main); }
 
-    /* DETAIL BLOCKS - UX ANIMATIONS */
-    .detail-block { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 100px; padding-top: 100px; border-top: 1px solid var(--border-color); }
-    .detail-block:first-of-type { border-top: none; padding-top: 60px; margin-top: 40px; }
-    .detail-img-wrap { border-radius: 8px; overflow: hidden; position: relative; }
-    .detail-img-wrap img { width: 100%; height: 500px; object-fit: cover; filter: grayscale(100%); transition: all 0.8s var(--transition-bezier); transform: scale(1.05); }
-    .detail-block:hover .detail-img-wrap img { filter: grayscale(0%); transform: scale(1); }
-    
-    .detail-content h2 { font-family: 'Outfit', sans-serif; font-size: 40px; font-weight: 800; margin-bottom: 24px; line-height: 1.1; }
-    .detail-content p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
-    .checklist { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
-    .check-item { display: flex; align-items: center; gap: 16px; font-size: 15px; font-weight: 500; }
-    .check-item::before { content: ''; display: block; width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; transition: transform 0.3s; }
-    .detail-block:hover .check-item::before { background: var(--accent-orange); transform: scale(1.5); }
+    /* NAV CTA — non-clickable */
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      color: #000; padding: 11px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 800;
+      pointer-events: none !important;
+      cursor: default !important;
+      -webkit-user-select: none; user-select: none;
+      opacity: 0.6;
+    }
 
-    /* FAQ - CLEAN UI */
-    .faq-section { background: var(--bg-card); padding: 120px 5%; }
-    .faq-inner { max-width: 800px; margin: 0 auto; }
-    .faq-title { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 800; margin-bottom: 64px; text-align: center; }
-    .faq-item { border-bottom: 1px solid var(--border-color); }
-    .faq-q { padding: 32px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; transition: color 0.3s; }
-    .faq-q:hover { color: var(--accent-orange); }
-    .faq-icon { font-size: 24px; transition: transform 0.4s var(--transition-bezier); }
-    .faq-item.active .faq-icon { transform: rotate(45deg); color: var(--accent-orange); }
-    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.5s var(--transition-bezier); }
-    .faq-a p { padding-bottom: 32px; font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    /* HAMBURGER — non-clickable on mobile */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-main); border-radius: 2px; }
+    @media(max-width:768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
 
-    /* FOOTER */
-    footer { padding: 80px 5% 40px; border-top: 1px solid var(--border-color); background: var(--bg-dark); }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; max-width: 1200px; margin: 0 auto 64px; }
-    .f-logo { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; margin-bottom: 16px; display: block; color: var(--text-main); }
-    .f-links { list-style: none; display: flex; flex-direction: column; gap: 16px; }
-    .f-links a { color: var(--text-muted); font-size: 14px; transition: color 0.3s; }
-    .f-links a:hover { color: var(--text-main); }
-
-    /* ANIMATIONS */
-    .anim-reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--transition-bezier); }
-    .anim-reveal.is-visible { opacity: 1; transform: translateY(0); }
-    @media(max-width:768px){ .detail-block{ grid-template-columns: 1fr; gap: 40px; } .page-h1{font-size: 48px;} .footer-grid{grid-template-columns: 1fr;} }
+    /* BODY — completely empty, just dark background */
+    .page-body {
+      min-height: 100vh;
+      background: var(--bg-dark);
+    }
   </style>
 </head>
 <body>
 
-<div class="page-loader" id="loader"><div class="loader-text"><span>I Servizi</span></div></div>
-
 <nav id="navbar">
-  <a class="nav-logo" href="home-complete2.html">SOS Auto Bologna</a>
+  <a class="nav-logo" tabindex="-1">
+    <span class="sos">SOS</span><span class="rest"> Auto Bologna</span>
+  </a>
   <ul class="nav-links">
-    <li><a href="home-complete2.html">Home</a></li>
-    <li><a href="services-complete2.html" class="active">Servizi</a></li>
-    <li><a href="coverage-contact-complete2.html">Copertura</a></li>
+    <li><a tabindex="-1">Home</a></li>
+    <li><a class="active" tabindex="-1">Servizi</a></li>
+    <li><a tabindex="-1">Copertura &amp; Contatti</a></li>
   </ul>
-  <a class="btn btn-solid nav-cta" href="tel:+393780937934">Chiama Ora</a>
+  <span class="nav-cta">📞 Chiama Ora</span>
+  <div class="hamburger"><span></span><span></span><span></span></div>
 </nav>
 
-<section class="section">
-  <div class="section-inner">
-    <h1 class="page-h1"><span>Competenza tecnica.</span><span>Intervento rapido.</span></h1>
-    <p class="page-sub">Le attrezzature migliori nelle mani dei tecnici più esperti. Ogni intervento è garantito senza danni collaterali al tuo veicolo.</p>
+<div class="page-body"></div>
 
-    <div class="detail-block anim-reveal">
-      <div class="detail-img-wrap"><img src="assets/hero_lockout.png" alt="Apertura"></div>
-      <div class="detail-content">
-        <h2>Apertura Porte Auto</h2>
-        <p>Utilizziamo tecniche all'avanguardia basate sulla decompressione e sulla decodifica della serratura. Questo ci permette di aprire il veicolo esattamente come farebbe la tua chiave originale, garantendo l'integrità totale delle guarnizioni e della carrozzeria.</p>
-        <div class="checklist">
-          <div class="check-item">Nessun graffio o danno strutturale</div>
-          <div class="check-item">Strumentazione Lishi Decoder per serrature complesse</div>
-          <div class="check-item">Efficace su tutti i brand automobilistici</div>
-        </div>
-        <a class="btn btn-solid" href="tel:+393780937934">Richiedi Intervento</a>
-      </div>
-    </div>
-
-    <div class="detail-block anim-reveal" style="direction: rtl;">
-      <div class="detail-img-wrap" style="direction: ltr;"><img src="assets/battery_service.png" alt="Batteria"></div>
-      <div class="detail-content" style="direction: ltr;">
-        <h2>Avvio Batteria Scarica</h2>
-        <p>Un calo di tensione improvviso non deve rovinare la tua giornata. Interveniamo con starter ad alta capacità in grado di fornire lo spunto necessario senza causare picchi di tensione che potrebbero danneggiare la delicata elettronica di bordo.</p>
-        <div class="checklist">
-          <div class="check-item">Booster professionali 12V/24V</div>
-          <div class="check-item">Sicuro per centraline e sistemi ibridi</div>
-          <div class="check-item">Diagnosi rapida dell'alternatore inclusa</div>
-        </div>
-        <a class="btn btn-solid" href="tel:+393780937934">Richiedi Intervento</a>
-      </div>
-    </div>
-
-    <div class="detail-block anim-reveal">
-      <div class="detail-img-wrap"><img src="assets/key_duplication.png" alt="Chiavi"></div>
-      <div class="detail-content">
-        <h2>Duplicazione Chiavi</h2>
-        <p>In collaborazione con laboratori specializzati sul territorio, offriamo un servizio completo di ricostruzione chiavi. Dal taglio meccanico alla programmazione del chip immobilizer direttamente dalla porta OBD dell'auto.</p>
-        <div class="checklist">
-          <div class="check-item">Clonazione chip transponder e smart keys</div>
-          <div class="check-item">Programmazione telecomandi originali</div>
-          <div class="check-item">Ricostruzione da smarrimento totale</div>
-        </div>
-        <a class="btn btn-solid" href="tel:+393780937934">Richiedi Preventivo</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="faq-section">
-  <div class="faq-inner anim-reveal">
-    <h2 class="faq-title">Domande Frequenti</h2>
-    
-    <div class="faq-item">
-      <div class="faq-q">Come aprite l'auto senza scasso? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Sfruttiamo tecniche di manipolazione fine della serratura o utilizziamo cuscini pneumatici ad uso professionale che creano uno spazio millimetrico per lo sblocco, senza deformare le portiere.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Quanto costa l'intervento? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Il costo dipende dal veicolo, dall'orario e dalla tua posizione esatta. Garantiamo la massima trasparenza: il preventivo viene comunicato telefonicamente prima dell'uscita del tecnico.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Posso pagare col bancomat sul posto? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Sì, tutti i nostri veicoli di soccorso sono equipaggiati con terminali POS portatili per pagamenti elettronici immediati in totale sicurezza.</p></div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-grid">
-    <div>
-      <a href="home-complete2.html" class="f-logo">SOS Auto Bologna</a>
-    </div>
-    <div>
-      <ul class="f-links">
-        <li><a href="home-complete2.html">Home</a></li>
-        <li><a href="services-complete2.html">Servizi</a></li>
-        <li><a href="coverage-contact-complete2.html">Copertura & Contatti</a></li>
-      </ul>
-    </div>
-  </div>
-</footer>
-
-<script>
-  window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('loaded'), 800));
-  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
-  
-  // FAQ
-  document.querySelectorAll('.faq-q').forEach(q => {
-    q.addEventListener('click', () => {
-      const item = q.parentNode; const a = item.querySelector('.faq-a');
-      const isActive = item.classList.contains('active');
-      document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('active'); i.querySelector('.faq-a').style.maxHeight = null; });
-      if(!isActive) { item.classList.add('active'); a.style.maxHeight = a.scrollHeight + 'px'; }
-    });
-  });
-
-  // Animations
-  const obs = new IntersectionObserver(e => e.forEach(entry => {
-    if(entry.isIntersecting){ entry.target.classList.add('is-visible'); obs.unobserve(entry.target); }
-  }), { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-  document.querySelectorAll('.anim-reveal').forEach(el => obs.observe(el));
-</script>
 </body>
 </html>
